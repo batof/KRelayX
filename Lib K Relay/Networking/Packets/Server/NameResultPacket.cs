@@ -2,10 +2,10 @@
 {
     public class NameResultPacket : Packet
     {
-        public bool Success;
         public string ErrorText;
-        public override PacketType Type
-        { get { return PacketType.NAMERESULT; } }
+        public bool Success;
+
+        public override PacketType Type => PacketType.NAMERESULT;
 
         public override void Read(PacketReader r)
         {

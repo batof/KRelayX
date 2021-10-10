@@ -5,8 +5,7 @@
         public ushort ClassType;
         public ushort SkinType;
 
-        public override PacketType Type
-        { get { return PacketType.CREATE; } }
+        public override PacketType Type => PacketType.CREATE;
 
         public override void Read(PacketReader r)
         {
@@ -16,8 +15,8 @@
 
         public override void Write(PacketWriter w)
         {
-            w.Write((ushort)ClassType);
-            w.Write((ushort)SkinType);
+            w.Write(ClassType);
+            w.Write(SkinType);
         }
     }
 }

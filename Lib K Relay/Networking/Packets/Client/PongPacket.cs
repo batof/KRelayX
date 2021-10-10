@@ -5,8 +5,7 @@
         public int Serial;
         public int Time;
 
-        public override PacketType Type
-        { get { return PacketType.PONG; } }
+        public override PacketType Type => PacketType.PONG;
 
         public override void Read(PacketReader r)
         {

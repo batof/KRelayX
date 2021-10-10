@@ -22,9 +22,9 @@
         {
             return new LocationRecord
             {
-                Time = this.Time,
-                X = base.X,
-                Y = base.Y
+                Time = Time,
+                X = X,
+                Y = Y
             };
         }
 

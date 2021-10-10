@@ -2,11 +2,10 @@
 {
     public class GlobalNotificationPacket : Packet
     {
-        public int TypeId;
         public string Text;
+        public int TypeId;
 
-        public override PacketType Type
-        { get { return PacketType.GLOBALNOTIFICATION; } }
+        public override PacketType Type => PacketType.GLOBAL_NOTIFICATION;
 
         public override void Read(PacketReader r)
         {

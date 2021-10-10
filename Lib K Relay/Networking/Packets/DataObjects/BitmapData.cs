@@ -4,9 +4,9 @@ namespace Lib_K_Relay.Networking.Packets.DataObjects
 {
     public class BitmapData : IDataObject
     {
-        public int Width;
-        public int Height;
         public byte[] Bytes = new byte[0];
+        public int Height;
+        public int Width;
 
         public IDataObject Read(PacketReader r)
         {
@@ -32,8 +32,8 @@ namespace Lib_K_Relay.Networking.Packets.DataObjects
 
             return new BitmapData
             {
-                Width = this.Width,
-                Height = this.Height,
+                Width = Width,
+                Height = Height,
                 Bytes = data
             };
         }

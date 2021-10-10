@@ -2,9 +2,9 @@
 {
     public class Tile : IDataObject
     {
+        public ushort Type;
         public short X;
         public short Y;
-        public ushort Type;
 
         public IDataObject Read(PacketReader r)
         {
@@ -26,10 +26,9 @@
         {
             return new Tile
             {
-                X = this.X,
-                Y = this.Y,
-                Type = this.Type
-
+                X = X,
+                Y = Y,
+                Type = Type
             };
         }
 

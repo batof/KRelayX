@@ -2,12 +2,11 @@
 {
     public class SquareHitPacket : Packet
     {
-        public int Time;
         public byte BulletId;
         public int ObjectId;
+        public int Time;
 
-        public override PacketType Type
-        { get { return PacketType.SQUAREHIT; } }
+        public override PacketType Type => PacketType.SQUAREHIT;
 
         public override void Read(PacketReader r)
         {

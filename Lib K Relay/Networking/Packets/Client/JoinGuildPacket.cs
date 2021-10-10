@@ -4,8 +4,7 @@
     {
         public string GuildName;
 
-        public override PacketType Type
-        { get { return PacketType.JOINGUILD; } }
+        public override PacketType Type => PacketType.JOINGUILD;
 
         public override void Read(PacketReader r)
         {

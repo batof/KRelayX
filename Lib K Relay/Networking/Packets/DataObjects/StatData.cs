@@ -1,239 +1,251 @@
 ﻿using System;
 
-namespace Lib_K_Relay.Networking.Packets.DataObjects
-{
-    public class StatData : IDataObject
-    {
+namespace Lib_K_Relay.Networking.Packets.DataObjects {
+    public class StatData : IDataObject {
         public StatsType Id;
         public int IntValue;
+        public int SecondaryValue;
         public string StringValue;
 
-        public bool IsStringData()
-        {
-            return Id.IsUTF();
-        }
-
-        public IDataObject Read(PacketReader r)
-        {
+        public IDataObject Read(PacketReader r) {
             Id = r.ReadByte();
-            if (IsStringData()) StringValue = r.ReadString();
-            else IntValue = r.ReadInt32();
+            if (IsStringData())
+                StringValue = r.ReadString();
+            else
+                IntValue = CompressedInt.Read(r);
+
+            SecondaryValue = CompressedInt.Read(r);
 
             return this;
         }
 
-        public void Write(PacketWriter w)
-        {
+        public void Write(PacketWriter w) {
             w.Write(Id);
-            if (IsStringData()) w.Write(StringValue);
-            else w.Write(IntValue);
+            if (IsStringData())
+                w.Write(StringValue);
+            else
+                CompressedInt.Write(w, IntValue);
+
+            CompressedInt.Write(w, SecondaryValue);
         }
 
-        public object Clone()
-        {
-            return new StatData
-            {
-                Id = this.Id,
-                IntValue = this.IntValue,
-                StringValue = this.StringValue
+        public object Clone() {
+            return new StatData {
+                Id = Id,
+                IntValue = IntValue,
+                StringValue = StringValue,
+                SecondaryValue = SecondaryValue
             };
         }
 
-        public override string ToString()
-        {
-            return "{ Id=" + Id + "Value=" + (IsStringData() ? StringValue : IntValue.ToString()) + " }";
+        public bool IsStringData() {
+            return Id.IsUTF();
+        }
+
+        public override string ToString() {
+            return "{ Id=" + Id + " Value=" + (IsStringData() ? StringValue : IntValue.ToString()) +
+                   " SecondaryValue=" + SecondaryValue + " }";
         }
     }
 
-    public class StatsType
-    {
-        public readonly static StatsType MaximumHP = 0;
-        public readonly static StatsType HP = 1;
-        public readonly static StatsType Size = 2;
-        public readonly static StatsType MaximumMP = 3;
-        public readonly static StatsType MP = 4;
-        public readonly static StatsType NextLevelExperience = 5;
-        public readonly static StatsType Experience = 6;
-        public readonly static StatsType Level = 7;
-        public readonly static StatsType Inventory0 = 8;
-        public readonly static StatsType Inventory1 = 9;
-        public readonly static StatsType Inventory2 = 10;
-        public readonly static StatsType Inventory3 = 11;
-        public readonly static StatsType Inventory4 = 12;
-        public readonly static StatsType Inventory5 = 13;
-        public readonly static StatsType Inventory6 = 14;
-        public readonly static StatsType Inventory7 = 15;
-        public readonly static StatsType Inventory8 = 16;
-        public readonly static StatsType Inventory9 = 17;
-        public readonly static StatsType Inventory10 = 18;
-        public readonly static StatsType Inventory11 = 19;
-        public readonly static StatsType Attack = 20;
-        public readonly static StatsType Defense = 21;
-        public readonly static StatsType Speed = 22;
-        public readonly static StatsType Vitality = 26;
-        public readonly static StatsType Wisdom = 27;
-        public readonly static StatsType Dexterity = 28;
-        public readonly static StatsType Effects = 29;
-        public readonly static StatsType Stars = 30;
-        public readonly static StatsType Name = 31; //Is UTF
-        public readonly static StatsType Texture1 = 32;
-        public readonly static StatsType Texture2 = 33;
-        public readonly static StatsType MerchandiseType = 34;
-        public readonly static StatsType Credits = 35;
-        public readonly static StatsType MerchandisePrice = 36;
-        public readonly static StatsType PortalUsable = 37; // "ACTIVE_STAT"
-        public readonly static StatsType AccountId = 38; //Is UTF
-        public readonly static StatsType AccountFame = 39;
-        public readonly static StatsType MerchandiseCurrency = 40;
-        public readonly static StatsType ObjectConnection = 41;
-        /*
-         * Mask :F0F0F0F0
-         * each byte > type
-         * 0:Dot
-         * 1:ushortLine
-         * 2:L
-         * 3:Line
-         * 4:T
-         * 5:Cross
-         * 0x21222112
-        */
-        public readonly static StatsType MerchandiseRemainingCount = 42;
-        public readonly static StatsType MerchandiseRemainingMinutes = 43;
-        public readonly static StatsType MerchandiseDiscount = 44;
-        public readonly static StatsType MerchandiseRankRequirement = 45;
-        public readonly static StatsType HealthBonus = 46;
-        public readonly static StatsType ManaBonus = 47;
-        public readonly static StatsType AttackBonus = 48;
-        public readonly static StatsType DefenseBonus = 49;
-        public readonly static StatsType SpeedBonus = 50;
-        public readonly static StatsType VitalityBonus = 51;
-        public readonly static StatsType WisdomBonus = 52;
-        public readonly static StatsType DexterityBonus = 53;
-        public readonly static StatsType OwnerAccountId = 54; //Is UTF
-        public readonly static StatsType RankRequired = 55;
-        public readonly static StatsType NameChosen = 56;
-        public readonly static StatsType CharacterFame = 57;
-        public readonly static StatsType CharacterFameGoal = 58;
-        public readonly static StatsType Glowing = 59;
-        public readonly static StatsType SinkLevel = 60;
-        public readonly static StatsType AltTextureIndex = 61;
-        public readonly static StatsType GuildName = 62; //Is UTF
-        public readonly static StatsType GuildRank = 63;
-        public readonly static StatsType OxygenBar = 64;
-        public readonly static StatsType XpBoosterActive = 65;
-        public readonly static StatsType XpBoostTime = 66;
-        public readonly static StatsType LootDropBoostTime = 67;
-        public readonly static StatsType LootTierBoostTime = 68;
-        public readonly static StatsType HealthPotionCount = 69;
-        public readonly static StatsType MagicPotionCount = 70;
-        public readonly static StatsType Backpack0 = 71;
-        public readonly static StatsType Backpack1 = 72;
-        public readonly static StatsType Backpack2 = 73;
-        public readonly static StatsType Backpack3 = 74;
-        public readonly static StatsType Backpack4 = 75;
-        public readonly static StatsType Backpack5 = 76;
-        public readonly static StatsType Backpack6 = 77;
-        public readonly static StatsType Backpack7 = 78;
-        public readonly static StatsType HasBackpack = 79;
-        public readonly static StatsType Skin = 80;
-        public readonly static StatsType PetInstanceId = 81;
-        public readonly static StatsType PetName = 82; //Is UTF
-        public readonly static StatsType PetType = 83;
-        public readonly static StatsType PetRarity = 84;
-        public readonly static StatsType PetMaximumLevel = 85;
-        public readonly static StatsType PetFamily = 86; //This does do nothing in the client
-        public readonly static StatsType PetPoints0 = 87;
-        public readonly static StatsType PetPoints1 = 88;
-        public readonly static StatsType PetPoints2 = 89;
-        public readonly static StatsType PetLevel0 = 90;
-        public readonly static StatsType PetLevel1 = 91;
-        public readonly static StatsType PetLevel2 = 92;
-        public readonly static StatsType PetAbilityType0 = 93;
-        public readonly static StatsType PetAbilityType1 = 94;
-        public readonly static StatsType PetAbilityType2 = 95;
-        public readonly static StatsType Effects2 = 96; // Used for things like Curse, Petrify etc...
-        public readonly static StatsType FortuneTokens = 97;
+    // this int casting nonsense is so scuffed...
+    public enum Stats {
+        MaximumHP = 0,
+        HP = 1,
+        Size = 2,
+        MaximumMP = 3,
+        MP = 4,
+        NextLevelExperience = 5,
+        Experience = 6,
+        Level = 7,
+        Inventory0 = 8,
+        Inventory1 = 9,
+        Inventory2 = 10,
+        Inventory3 = 11,
+        Inventory4 = 12,
+        Inventory5 = 13,
+        Inventory6 = 14,
+        Inventory7 = 15,
+        Inventory8 = 16,
+        Inventory9 = 17,
+        Inventory10 = 18,
+        Inventory11 = 19,
+        Attack = 20,
+        Defense = 21,
+        Speed = 22,
+        Vitality = 26,
+        Wisdom = 27,
+        Dexterity = 28,
+        Effects = 29,
+        Stars = 30,
+        Name = 31,
+        Texture1 = 32,
+        Texture2 = 33,
+        MerchandiseType = 34,
+        Credits = 35,
+        MerchandisePrice = 36,
+        PortalUsable = 37,
+        AccountId = 38,
+        AccountFame = 39,
+        MerchandiseCurrency = 40,
+        ObjectConnection = 41,
+        MerchandiseRemainingCount = 42,
+        MerchandiseRemainingMinutes = 43,
+        MerchandiseDiscount = 44,
+        MerchandiseRankRequirement = 45,
+        HealthBonus = 46,
+        ManaBonus = 47,
+        AttackBonus = 48,
+        DefenseBonus = 49,
+        SpeedBonus = 50,
+        VitalityBonus = 51,
+        WisdomBonus = 52,
+        DexterityBonus = 53,
+        OwnerAccountId = 54,
+        RankRequired = 55,
+        NameChosen = 56,
+        CharacterFame = 57,
+        CharacterFameGoal = 58,
+        LegendaryRank = 59,
+        SinkLevel = 60,
+        AltTextureIndex = 61,
+        GuildName = 62,
+        GuildRank = 63,
+        Breath = 64,
+        HasXpBoost = 65,
+        XpBoostTime = 66,
+        LootDropBoostTime = 67,
+        LootTierBoostTime = 68,
+        // unused by Exalt
+        HealthPotionCount = 69,
+        MagicPotionCount = 70,
+        // unused by Exalt
+        Backpack0 = 71,
+        Backpack1 = 72,
+        Backpack2 = 73,
+        Backpack3 = 74,
+        Backpack4 = 75,
+        Backpack5 = 76,
+        Backpack6 = 77,
+        Backpack7 = 78,
+        HasBackpack = 79,
+        Skin = 80,
+        PetInstanceId = 81,
+        PetName = 82,
+        PetType = 83,
+        PetRarity = 84,
+        PetMaximumLevel = 85,
+        PetFamily = 86,
+        PetPoints0 = 87,
+        PetPoints1 = 88,
+        PetPoints2 = 89,
+        PetLevel0 = 90,
+        PetLevel1 = 91,
+        PetLevel2 = 92,
+        PetAbilityType0 = 93,
+        PetAbilityType1 = 94,
+        PetAbilityType2 = 95,
+        Effects2 = 96,
+        FortuneTokens = 97,
+        SupporterPoints = 98,
+        IsSupporter = 99,
+        // i think the star bg is unused, but still exported?
+        ChallengerStarBg = 100,
+        PlayerId = 101,
+        ProjectileSpeedMult = 102,
+        ProjectileLifeMult = 103,
+        OpenedAtTimestamp = 104,
+        ExaltedAttack = 105,
+        ExaltedDefense = 106,
+        ExaltedSpeed = 107,
+        ExaltedVitality = 108,
+        ExaltedWisdom = 109,
+        ExaltedDexterity = 110,
+        ExaltedHealth = 111,
+        ExaltedMana = 112,
+        ExaltationDamageMultiplier = 113,
+        PetOwnerAccountId = 114,
+        GraveAccountId = 115,
+        QuickslotItem1 = 116,
+        QuickslotItem2 = 117,
+        QuickslotItem3 = 118,
+        HasQuickslotUpgrade = 119,
+        Forgefire = 120
+    }
 
-        private byte m_type;
+    public class StatsType {
+        private readonly byte m_type;
 
-        private StatsType(byte type)
-        {
-            this.m_type = type;
+        private StatsType(byte type) {
+            m_type = type;
         }
 
-        public bool IsUTF()
-        {
-            if (this == StatsType.Name || this == StatsType.AccountId || this == StatsType.OwnerAccountId
-               || this == StatsType.GuildName || this == StatsType.PetName)
-                return true;
-            return false;
+        public bool IsUTF() {
+            return (int)this == (int)Stats.Name 
+                   || (int)this == (int)Stats.AccountId 
+                   || (int)this == (int)Stats.OwnerAccountId
+                   || (int)this == (int)Stats.GuildName 
+                   || (int)this == (int)Stats.PetName 
+                   || (int)this == (int)Stats.GraveAccountId;
         }
 
-        public static implicit operator StatsType(int type)
-        {
+        public static implicit operator StatsType(int type) {
             if (type > byte.MaxValue) throw new Exception("Not a valid StatData number.");
+
             return new StatsType((byte)type);
         }
 
-        public static implicit operator StatsType(byte type)
-        {
+        public static implicit operator StatsType(byte type) {
             return new StatsType(type);
         }
 
-        public static bool operator ==(StatsType type, int id)
-        {
+        public static bool operator ==(StatsType type, int id) {
             if (id > byte.MaxValue) throw new Exception("Not a valid StatData number.");
+
             return type.m_type == (byte)id;
         }
 
-        public static bool operator ==(StatsType type, byte id)
-        {
+        public static bool operator ==(StatsType type, byte id) {
             return type.m_type == id;
         }
 
-        public static bool operator !=(StatsType type, int id)
-        {
+        public static bool operator !=(StatsType type, int id) {
             if (id > byte.MaxValue) throw new Exception("Not a valid StatData number.");
+
             return type.m_type != (byte)id;
         }
 
-        public static bool operator !=(StatsType type, byte id)
-        {
+        public static bool operator !=(StatsType type, byte id) {
             return type.m_type != id;
         }
 
-        public static bool operator ==(StatsType type, StatsType id)
-        {
+        public static bool operator ==(StatsType type, StatsType id) {
             return type.m_type == id.m_type;
         }
 
-        public static bool operator !=(StatsType type, StatsType id)
-        {
+        public static bool operator !=(StatsType type, StatsType id) {
             return type.m_type != id.m_type;
         }
 
-        public static implicit operator int(StatsType type)
-        {
+        public static implicit operator int(StatsType type) {
             return type.m_type;
         }
 
-        public static implicit operator byte(StatsType type)
-        {
+        public static implicit operator byte(StatsType type) {
             return type.m_type;
         }
 
-        public override int GetHashCode()
-        {
+        public override int GetHashCode() {
             return base.GetHashCode();
         }
 
-        public override bool Equals(object obj)
-        {
+        public override bool Equals(object obj) {
             if (!(obj is StatsType)) return false;
+
             return this == (StatsType)obj;
         }
-        public override string ToString()
-        {
+
+        public override string ToString() {
             return m_type.ToString();
         }
     }

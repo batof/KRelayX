@@ -1,29 +1,27 @@
 ﻿using Lib_K_Relay.Utilities;
-using System.Collections.Generic;
 
 namespace Lib_K_Relay.Networking.Packets.Server
 {
     public class DamagePacket : Packet
     {
-        public int TargetId;
-        public ConditionEffects Effects;
-        public ushort Damage;
-        public bool Killed;
+        public bool ArmorPierce;
         public byte BulletId;
+        public ushort Damage;
+        public ConditionEffectIndex[] Effects;
         public int ObjectId;
+        public int TargetId;
 
-        public override PacketType Type
-        { get { return PacketType.DAMAGE; } }
+        public override PacketType Type => PacketType.DAMAGE;
 
         public override void Read(PacketReader r)
         {
             TargetId = r.ReadInt32();
-            byte c = r.ReadByte();
-            Effects = 0;
-            for (int i = 0; i < c; i++)
-                Effects |= (ConditionEffects)(1 << r.ReadByte());
+            Effects = new ConditionEffectIndex[r.ReadByte()];
+            for (var i = 0; i < Effects.Length; i++)
+                Effects[i] = (ConditionEffectIndex) r.ReadByte();
+
             Damage = r.ReadUInt16();
-            Killed = r.ReadBoolean();
+            ArmorPierce = r.ReadBoolean();
             BulletId = r.ReadByte();
             ObjectId = r.ReadInt32();
         }
@@ -31,14 +29,12 @@ namespace Lib_K_Relay.Networking.Packets.Server
         public override void Write(PacketWriter w)
         {
             w.Write(TargetId);
-            List<byte> eff = new List<byte>();
-            for (byte i = 1; i < 255; i++)
-                if ((Effects & (ConditionEffects)(1 << i)) != 0)
-                    eff.Add(i);
-            w.Write((byte)eff.Count);
-            foreach (byte i in eff) w.Write(i);
+            w.Write((byte) Effects.Length);
+            foreach (var c in Effects)
+                w.Write((byte) c);
+
             w.Write(Damage);
-            w.Write(Killed);
+            w.Write(ArmorPierce);
             w.Write(BulletId);
             w.Write(ObjectId);
         }

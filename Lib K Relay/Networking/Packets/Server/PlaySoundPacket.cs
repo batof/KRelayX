@@ -5,8 +5,7 @@
         public int OwnerId;
         public int SoundId;
 
-        public override PacketType Type
-        { get { return PacketType.PLAYSOUND; } }
+        public override PacketType Type => PacketType.PLAYSOUND;
 
         public override void Read(PacketReader r)
         {
@@ -17,7 +16,7 @@
         public override void Write(PacketWriter w)
         {
             w.Write(OwnerId);
-            w.Write((byte)SoundId);
+            w.Write((byte) SoundId);
         }
     }
 }

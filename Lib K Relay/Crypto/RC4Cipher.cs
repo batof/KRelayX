@@ -5,12 +5,12 @@ namespace Lib_K_Relay.Crypto
 {
     public class RC4Cipher
     {
-        private readonly static int STATE_LENGTH = 256;
+        private static readonly int STATE_LENGTH = 256;
 
         private byte[] engineState;
+        private byte[] workingKey;
         private int x;
         private int y;
-        private byte[] workingKey;
 
         public RC4Cipher(byte[] key)
         {
@@ -43,19 +43,19 @@ namespace Lib_K_Relay.Crypto
             if ((outOff + length) > output.Length)
                 throw new ArgumentException("output buffer too short");
             */
-            for (int i = 0; i < length; i++)
+            for (var i = 0; i < length; i++)
             {
                 x = (x + 1) & 0xff;
                 y = (engineState[x] + y) & 0xff;
 
                 // swap
-                byte tmp = engineState[x];
+                var tmp = engineState[x];
                 engineState[x] = engineState[y];
                 engineState[y] = tmp;
 
                 // xor
-                output[i + outOff] = (byte)(input[i + inOff]
-                        ^ engineState[(engineState[x] + engineState[y]) & 0xff]);
+                output[i + outOff] = (byte) (input[i + inOff]
+                                             ^ engineState[(engineState[x] + engineState[y]) & 0xff]);
             }
         }
 
@@ -64,20 +64,18 @@ namespace Lib_K_Relay.Crypto
             workingKey = keyBytes;
             x = y = 0;
 
-            if (engineState == null)
-                engineState = new byte[STATE_LENGTH];
+            if (engineState == null) engineState = new byte[STATE_LENGTH];
 
             // reset the state of the engine
-            for (int i = 0; i < STATE_LENGTH; i++)
-                engineState[i] = (byte)i;
+            for (var i = 0; i < STATE_LENGTH; i++) engineState[i] = (byte) i;
 
             int i1 = 0, i2 = 0;
 
-            for (int i = 0; i < STATE_LENGTH; i++)
+            for (var i = 0; i < STATE_LENGTH; i++)
             {
                 i2 = ((keyBytes[i1] & 0xff) + engineState[i] + i2) & 0xff;
                 // do the byte-swap inline
-                byte tmp = engineState[i];
+                var tmp = engineState[i];
                 engineState[i] = engineState[i2];
                 engineState[i2] = tmp;
                 i1 = (i1 + 1) % keyBytes.Length;
@@ -86,17 +84,17 @@ namespace Lib_K_Relay.Crypto
 
         public static byte[] HexStringToBytes(string key)
         {
-            if (key.Length % 2 != 0)
-                throw new ArgumentException("Invalid hex string!");
+            if (key.Length % 2 != 0) throw new ArgumentException("Invalid hex string!");
 
-            byte[] bytes = new byte[key.Length / 2];
-            char[] c = key.ToCharArray();
-            for (int i = 0; i < c.Length; i += 2)
+            var bytes = new byte[key.Length / 2];
+            var c = key.ToCharArray();
+            for (var i = 0; i < c.Length; i += 2)
             {
-                StringBuilder sb = new StringBuilder(2).Append(c[i]).Append(c[(i + 1)]);
-                int j = Convert.ToInt32(sb.ToString(), 16);
-                bytes[(i / 2)] = (byte)j;
+                var sb = new StringBuilder(2).Append(c[i]).Append(c[i + 1]);
+                var j = Convert.ToInt32(sb.ToString(), 16);
+                bytes[i / 2] = (byte) j;
             }
+
             return bytes;
         }
     }

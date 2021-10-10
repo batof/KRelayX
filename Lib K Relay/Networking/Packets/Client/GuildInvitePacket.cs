@@ -4,8 +4,7 @@
     {
         public string Name;
 
-        public override PacketType Type
-        { get { return PacketType.GUILDINVITE; } }
+        public override PacketType Type => PacketType.GUILDINVITE;
 
         public override void Read(PacketReader r)
         {

@@ -2,15 +2,15 @@
 {
     public class TradeDonePacket : Packet
     {
+        public string Message;
         /*
 		TradeSuccessful = 0
 		PlayerCanceled = 1
 		*/
 
         public int Result;
-        public string Message;
-        public override PacketType Type
-        { get { return PacketType.TRADEDONE; } }
+
+        public override PacketType Type => PacketType.TRADEDONE;
 
         public override void Read(PacketReader r)
         {

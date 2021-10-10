@@ -4,12 +4,11 @@
     {
         public int ObjectId;
 
-        public override PacketType Type
-        { get { return PacketType.USEPORTAL; } }
+        public override PacketType Type => PacketType.USEPORTAL;
 
         public override void Read(PacketReader r)
         {
-            this.ObjectId = r.ReadInt32();
+            ObjectId = r.ReadInt32();
         }
 
         public override void Write(PacketWriter w)

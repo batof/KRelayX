@@ -2,14 +2,14 @@
 {
     public class Item : IDataObject
     {
-        public int ItemItem;
+        public bool Included;
+        public int ItemId;
         public int SlotType;
         public bool Tradable;
-        public bool Included;
 
         public IDataObject Read(PacketReader r)
         {
-            ItemItem = r.ReadInt32();
+            ItemId = r.ReadInt32();
             SlotType = r.ReadInt32();
             Tradable = r.ReadBoolean();
             Included = r.ReadBoolean();
@@ -19,7 +19,7 @@
 
         public void Write(PacketWriter w)
         {
-            w.Write(ItemItem);
+            w.Write(ItemId);
             w.Write(SlotType);
             w.Write(Tradable);
             w.Write(Included);
@@ -29,16 +29,17 @@
         {
             return new Item
             {
-                ItemItem = this.ItemItem,
-                SlotType = this.SlotType,
-                Tradable = this.Tradable,
-                Included = this.Included
+                ItemId = ItemId,
+                SlotType = SlotType,
+                Tradable = Tradable,
+                Included = Included
             };
         }
 
         public override string ToString()
         {
-            return "{ ItemItem=" + ItemItem + ", SlotType=" + SlotType + ", Tradable=" + Tradable + ", Included=" + Included + " }";
+            return "{ ItemId=" + ItemId + ", SlotType=" + SlotType + ", Tradable=" + Tradable + ", Included=" +
+                   Included + " }";
         }
     }
 }

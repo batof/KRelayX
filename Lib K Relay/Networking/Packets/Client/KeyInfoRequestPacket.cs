@@ -2,19 +2,18 @@
 {
     public class KeyInfoRequestPacket : Packet
     {
-        public byte[] Request;
+        public int ItemType;
 
-        public override PacketType Type
-        { get { return PacketType.KEYINFOREQUEST; } }
+        public override PacketType Type => PacketType.KEY_INFO_REQUEST;
 
         public override void Read(PacketReader r)
         {
-            Request = r.ReadBytes((int)r.BaseStream.Length - 5);
+            ItemType = r.ReadInt32();
         }
 
         public override void Write(PacketWriter w)
         {
-            w.Write(Request);
+            w.Write(ItemType);
         }
     }
 }

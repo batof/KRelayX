@@ -6,8 +6,7 @@
         public bool Add;
         public int ObjectId;
 
-        public override PacketType Type
-        { get { return PacketType.EDITACCOUNTLIST; } }
+        public override PacketType Type => PacketType.EDITACCOUNTLIST;
 
         public override void Read(PacketReader r)
         {

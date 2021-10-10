@@ -2,10 +2,10 @@
 
 namespace Lib_K_Relay.Networking
 {
-    class PacketBuffer
+    internal class PacketBuffer
     {
-        public int Index = 0;
         public byte[] Bytes;
+        public int Index;
 
         public PacketBuffer()
         {
@@ -14,10 +14,9 @@ namespace Lib_K_Relay.Networking
 
         public void Resize(int newSize)
         {
-            if (newSize > 1048576)
-                throw new ArgumentException("New buffer size is too large");
+            if (newSize > 1048576) throw new ArgumentException("New buffer size is too large");
 
-            byte[] old = Bytes;
+            var old = Bytes;
             Bytes = new byte[newSize];
             Bytes[0] = old[0];
             Bytes[1] = old[1];

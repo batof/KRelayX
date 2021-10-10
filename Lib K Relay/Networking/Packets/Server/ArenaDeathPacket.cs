@@ -4,8 +4,7 @@
     {
         public int RestartPrice;
 
-        public override PacketType Type
-        { get { return PacketType.ARENADEATH; } }
+        public override PacketType Type => PacketType.ARENA_DEATH;
 
         public override void Read(PacketReader r)
         {

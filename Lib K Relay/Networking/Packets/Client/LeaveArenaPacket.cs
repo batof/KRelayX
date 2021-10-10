@@ -4,8 +4,7 @@
     {
         public int Time;
 
-        public override PacketType Type
-        { get { return PacketType.LEAVEARENA; } }
+        public override PacketType Type => PacketType.ARENA_DEATH;
 
         public override void Read(PacketReader r)
         {

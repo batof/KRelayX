@@ -3,13 +3,13 @@
     public class SlotObject : IDataObject
     {
         public int ObjectId;
-        public byte SlotId;
         public int ObjectType;
+        public int SlotId;
 
         public IDataObject Read(PacketReader r)
         {
             ObjectId = r.ReadInt32();
-            SlotId = r.ReadByte();
+            SlotId = r.ReadInt32();
             ObjectType = r.ReadInt32();
 
             return this;
@@ -26,9 +26,9 @@
         {
             return new SlotObject
             {
-                ObjectId = this.ObjectId,
-                ObjectType = this.ObjectType,
-                SlotId = this.SlotId
+                ObjectId = ObjectId,
+                ObjectType = ObjectType,
+                SlotId = SlotId
             };
         }
 

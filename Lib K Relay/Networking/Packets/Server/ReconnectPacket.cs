@@ -2,22 +2,21 @@
 {
     public class ReconnectPacket : Packet
     {
-        public string Name;
-        public string Host;
-        public int Port;
         public int GameId;
-        public int KeyTime;
+        public string Host;
         public bool IsFromArena;
         public byte[] Key;
+        public int KeyTime;
+        public string Name;
+        public ushort Port;
 
-        public override PacketType Type
-        { get { return PacketType.RECONNECT; } }
+        public override PacketType Type => PacketType.RECONNECT;
 
         public override void Read(PacketReader r)
         {
             Name = r.ReadString();
             Host = r.ReadString();
-            Port = r.ReadInt32();
+            Port = r.ReadUInt16();
             GameId = r.ReadInt32();
             KeyTime = r.ReadInt32();
             IsFromArena = r.ReadBoolean();
@@ -32,7 +31,7 @@
             w.Write(GameId);
             w.Write(KeyTime);
             w.Write(IsFromArena);
-            w.Write((short)Key.Length);
+            w.Write((short) Key.Length);
             w.Write(Key);
         }
     }

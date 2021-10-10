@@ -41,6 +41,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoNexus", "AutoNexus\Auto
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectileMod", "ProjectileMod\ProjectileMod.csproj", "{64610F95-DE93-4FD9-A8BC-C48BDF20D429}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TutorialMode", "TutorialMode\TutorialMode.csproj", "{60ECB85E-A590-482B-B9B9-CFA66AE4CEAE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -119,6 +121,10 @@ Global
 		{64610F95-DE93-4FD9-A8BC-C48BDF20D429}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{64610F95-DE93-4FD9-A8BC-C48BDF20D429}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{64610F95-DE93-4FD9-A8BC-C48BDF20D429}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60ECB85E-A590-482B-B9B9-CFA66AE4CEAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60ECB85E-A590-482B-B9B9-CFA66AE4CEAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60ECB85E-A590-482B-B9B9-CFA66AE4CEAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60ECB85E-A590-482B-B9B9-CFA66AE4CEAE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -140,6 +146,7 @@ Global
 		{4B667A7D-81AF-40FF-9162-77E627DBEF31} = {03A97CEB-D1F4-4BD0-A708-8151EF71A8D7}
 		{F9716B4A-D10D-4098-B79D-84A796F9C584} = {03A97CEB-D1F4-4BD0-A708-8151EF71A8D7}
 		{64610F95-DE93-4FD9-A8BC-C48BDF20D429} = {03A97CEB-D1F4-4BD0-A708-8151EF71A8D7}
+		{60ECB85E-A590-482B-B9B9-CFA66AE4CEAE} = {03A97CEB-D1F4-4BD0-A708-8151EF71A8D7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9FC8A10A-AEE9-4BA3-AAD6-350CDAA69F4A}

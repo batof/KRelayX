@@ -5,8 +5,7 @@
         public byte BulletId;
         public int ObjectId;
 
-        public override PacketType Type
-        { get { return PacketType.PLAYERHIT; } }
+        public override PacketType Type => PacketType.PLAYERHIT;
 
         public override void Read(PacketReader r)
         {

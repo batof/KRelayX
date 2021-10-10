@@ -4,8 +4,7 @@
     {
         public string Name;
 
-        public override PacketType Type
-        { get { return PacketType.CREATEGUILD; } }
+        public override PacketType Type => PacketType.CREATEGUILD;
 
         public override void Read(PacketReader r)
         {

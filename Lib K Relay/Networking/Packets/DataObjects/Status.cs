@@ -2,19 +2,19 @@
 {
     public class Status : IDataObject
     {
+        public StatData[] Data;
         public int ObjectId;
         public Location Position = new Location();
-        public StatData[] Data;
 
         public IDataObject Read(PacketReader r)
         {
-            ObjectId = r.ReadInt32();
+            ObjectId = CompressedInt.Read(r);
             Position.Read(r);
-            Data = new StatData[r.ReadInt16()];
+            Data = new StatData[CompressedInt.Read(r)];
 
-            for (int i = 0; i < Data.Length; i++)
+            for (var i = 0; i < Data.Length; i++)
             {
-                StatData statData = new StatData();
+                var statData = new StatData();
                 statData.Read(r);
                 Data[i] = statData;
             }
@@ -24,21 +24,21 @@
 
         public void Write(PacketWriter w)
         {
-            w.Write(ObjectId);
+            CompressedInt.Write(w, ObjectId);
             Position.Write(w);
-            w.Write((short)Data.Length);
+            CompressedInt.Write(w, Data.Length);
 
-            foreach (StatData statdata in Data)
-                statdata.Write(w);
+            foreach (var statData in Data)
+                statData.Write(w);
         }
 
         public object Clone()
         {
             return new Status
             {
-                Data = (StatData[])this.Data.Clone(),
-                ObjectId = this.ObjectId,
-                Position = (Location)this.Position.Clone()
+                Data = (StatData[]) Data.Clone(),
+                ObjectId = ObjectId,
+                Position = (Location) Position.Clone()
             };
         }
     }

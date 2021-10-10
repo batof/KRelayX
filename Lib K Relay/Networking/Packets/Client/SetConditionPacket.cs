@@ -2,11 +2,10 @@
 {
     public class SetConditionPacket : Packet
     {
-        public byte ConditionEffect;
         public float ConditionDuration;
+        public byte ConditionEffect;
 
-        public override PacketType Type
-        { get { return PacketType.SETCONDITION; } }
+        public override PacketType Type => PacketType.SETCONDITION;
 
         public override void Read(PacketReader r)
         {

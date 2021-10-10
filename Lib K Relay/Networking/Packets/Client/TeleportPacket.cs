@@ -4,8 +4,7 @@
     {
         public int ObjectId;
 
-        public override PacketType Type
-        { get { return PacketType.TELEPORT; } }
+        public override PacketType Type => PacketType.TELEPORT;
 
         public override void Read(PacketReader r)
         {

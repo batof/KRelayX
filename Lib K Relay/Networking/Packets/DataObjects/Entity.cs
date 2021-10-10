@@ -2,12 +2,12 @@
 {
     public class Entity : IDataObject
     {
-        public short ObjectType;
+        public ushort ObjectType;
         public Status Status = new Status();
 
         public IDataObject Read(PacketReader r)
         {
-            ObjectType = r.ReadInt16();
+            ObjectType = r.ReadUInt16();
             Status.Read(r);
 
             return this;
@@ -23,8 +23,8 @@
         {
             return new Entity
             {
-                ObjectType = this.ObjectType,
-                Status = (Status)this.Status.Clone()
+                ObjectType = ObjectType,
+                Status = (Status) Status.Clone()
             };
         }
     }

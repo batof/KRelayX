@@ -4,22 +4,27 @@ namespace Lib_K_Relay.Networking.Packets.Client
 {
     public class PlayerShootPacket : Packet
     {
-        public int Time;
-        public byte BulletId;
-        public short ContainerType;
-        public Location Position;
         public float Angle;
+        public byte BulletId;
+        public byte BurstId;
+        public ushort ContainerType;
+        public short LifeMultiplier;
+        public Location Position;
+        public short SpeedMultiplier;
+        public int Time;
 
-        public override PacketType Type
-        { get { return PacketType.PLAYERSHOOT; } }
+        public override PacketType Type => PacketType.PLAYERSHOOT;
 
         public override void Read(PacketReader r)
         {
             Time = r.ReadInt32();
             BulletId = r.ReadByte();
-            ContainerType = r.ReadInt16();
-            Position = (Location)new Location().Read(r);
+            ContainerType = r.ReadUInt16();
+            Position = (Location) new Location().Read(r);
             Angle = r.ReadSingle();
+            SpeedMultiplier = r.ReadInt16();
+            LifeMultiplier = r.ReadInt16();
+            BurstId = r.ReadByte();
         }
 
         public override void Write(PacketWriter w)
@@ -29,6 +34,9 @@ namespace Lib_K_Relay.Networking.Packets.Client
             w.Write(ContainerType);
             Position.Write(w);
             w.Write(Angle);
+            w.Write(SpeedMultiplier);
+            w.Write(LifeMultiplier);
+            w.Write(BurstId);
         }
     }
 }

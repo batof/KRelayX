@@ -2,10 +2,10 @@
 {
     public class FilePacket : Packet
     {
-        public string Name;
         public byte[] Bytes;
-        public override PacketType Type
-        { get { return PacketType.FILE; } }
+        public string Name;
+
+        public override PacketType Type => PacketType.FILE;
 
         public override void Read(PacketReader r)
         {

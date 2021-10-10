@@ -4,20 +4,19 @@ namespace Lib_K_Relay.Networking.Packets.Client
 {
     public class InvSwapPacket : Packet
     {
-        public int Time;
         public Location Position;
         public SlotObject SlotObject1;
         public SlotObject SlotObject2;
+        public int Time;
 
-        public override PacketType Type
-        { get { return PacketType.INVSWAP; } }
+        public override PacketType Type => PacketType.INVSWAP;
 
         public override void Read(PacketReader r)
         {
             Time = r.ReadInt32();
-            Position = (Location)new Location().Read(r);
-            SlotObject1 = (SlotObject)new SlotObject().Read(r);
-            SlotObject2 = (SlotObject)new SlotObject().Read(r);
+            Position = (Location) new Location().Read(r);
+            SlotObject1 = (SlotObject) new SlotObject().Read(r);
+            SlotObject2 = (SlotObject) new SlotObject().Read(r);
         }
 
         public override void Write(PacketWriter w)

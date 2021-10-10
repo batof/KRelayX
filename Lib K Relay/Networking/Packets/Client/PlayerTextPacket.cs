@@ -4,8 +4,7 @@
     {
         public string Text;
 
-        public override PacketType Type
-        { get { return PacketType.PLAYERTEXT; } }
+        public override PacketType Type => PacketType.PLAYERTEXT;
 
         public override void Read(PacketReader r)
         {

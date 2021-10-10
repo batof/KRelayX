@@ -7,7 +7,9 @@ namespace Lib_K_Relay.Networking.Packets.DataObjects
         public float X;
         public float Y;
 
-        public Location() { }
+        public Location()
+        {
+        }
 
         public Location(float x, float y)
         {
@@ -15,17 +17,12 @@ namespace Lib_K_Relay.Networking.Packets.DataObjects
             Y = y;
         }
 
-        public static Location Empty
-        {
-            get
+        public static Location Empty =>
+            new Location
             {
-                return new Location()
-                {
-                    X = 0,
-                    Y = 0
-                };
-            }
-        }
+                X = 0,
+                Y = 0
+            };
 
         public virtual IDataObject Read(PacketReader r)
         {
@@ -41,39 +38,39 @@ namespace Lib_K_Relay.Networking.Packets.DataObjects
             w.Write(Y);
         }
 
+        public virtual object Clone()
+        {
+            return new Location
+            {
+                X = X,
+                Y = Y
+            };
+        }
+
         public float DistanceSquaredTo(Location location)
         {
-            float dx = location.X - X;
-            float dy = location.Y - Y;
+            var dx = location.X - X;
+            var dy = location.Y - Y;
             return dx * dx + dy * dy;
         }
 
         public float DistanceTo(Location location)
         {
-            return (float)Math.Sqrt(DistanceSquaredTo(location));
+            return (float) Math.Sqrt(DistanceSquaredTo(location));
         }
 
         private float GetAngle(Location l1, Location l2)
         {
-            float dX = l2.X - l1.X;
-            float dY = l2.Y - l1.Y;
-            return (float)Math.Atan2(dY, dX);
+            var dX = l2.X - l1.X;
+            var dY = l2.Y - l1.Y;
+            return (float) Math.Atan2(dY, dX);
         }
 
         private float GetAngle(float x1, float y1, float x2, float y2)
         {
-            float dX = x2 - x1;
-            float dY = y2 - y1;
-            return (float)Math.Atan2(dY, dX);
-        }
-
-        public virtual object Clone()
-        {
-            return new Location
-            {
-                X = this.X,
-                Y = this.Y
-            };
+            var dX = x2 - x1;
+            var dY = y2 - y1;
+            return (float) Math.Atan2(dY, dX);
         }
 
         public override string ToString()

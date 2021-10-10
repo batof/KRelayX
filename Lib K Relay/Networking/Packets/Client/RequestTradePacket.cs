@@ -4,8 +4,7 @@
     {
         public string Name;
 
-        public override PacketType Type
-        { get { return PacketType.REQUESTTRADE; } }
+        public override PacketType Type => PacketType.REQUESTTRADE;
 
         public override void Read(PacketReader r)
         {

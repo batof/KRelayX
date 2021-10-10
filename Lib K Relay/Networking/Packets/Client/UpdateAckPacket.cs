@@ -2,10 +2,14 @@
 {
     public class UpdateAckPacket : Packet
     {
-        public override PacketType Type
-        { get { return PacketType.UPDATEACK; } }
+        public override PacketType Type => PacketType.UPDATEACK;
 
-        public override void Read(PacketReader r) { }
-        public override void Write(PacketWriter w) { }
+        public override void Read(PacketReader r)
+        {
+        }
+
+        public override void Write(PacketWriter w)
+        {
+        }
     }
 }

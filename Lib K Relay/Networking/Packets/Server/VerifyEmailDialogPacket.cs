@@ -2,18 +2,14 @@
 {
     public class VerifyEmailDialogPacket : Packet
     {
-
-        public override PacketType Type
-        { get { return PacketType.VERIFYEMAILDIALOG; } }
+        public override PacketType Type => PacketType.VERIFY_EMAIL;
 
         public override void Read(PacketReader r)
         {
-
         }
 
         public override void Write(PacketWriter w)
         {
-
         }
     }
 }

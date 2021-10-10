@@ -4,23 +4,23 @@ namespace Lib_K_Relay.Networking.Packets.Server
 {
     public class EnemyShootPacket : Packet
     {
-        public byte BulletId;
-        public int OwnerId;
-        public byte BulletType;
-        public Location Location;
         public float Angle;
-        public short Damage;
-        public byte NumShots;
         public float AngleInc;
-        public override PacketType Type
-        { get { return PacketType.ENEMYSHOOT; } }
+        public byte BulletId;
+        public byte BulletType;
+        public short Damage;
+        public Location Location;
+        public byte NumShots;
+        public int OwnerId;
+
+        public override PacketType Type => PacketType.ENEMYSHOOT;
 
         public override void Read(PacketReader r)
         {
             BulletId = r.ReadByte();
             OwnerId = r.ReadInt32();
             BulletType = r.ReadByte();
-            Location = (Location)new Location().Read(r);
+            Location = (Location) new Location().Read(r);
             Angle = r.ReadSingle();
             Damage = r.ReadInt16();
 
@@ -47,7 +47,7 @@ namespace Lib_K_Relay.Networking.Packets.Server
 
             if (NumShots != 1)
             {
-                w.Write((byte)NumShots);
+                w.Write(NumShots);
                 w.Write(AngleInc);
             }
         }

@@ -5,8 +5,7 @@
         public string Name;
         public int Value;
 
-        public override PacketType Type
-        { get { return PacketType.CLIENTSTAT; } }
+        public override PacketType Type => PacketType.CLIENTSTAT;
 
         public override void Read(PacketReader r)
         {

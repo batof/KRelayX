@@ -6,12 +6,11 @@ namespace Lib_K_Relay.Networking.Packets.Server
     {
         public BitmapData BitmapData;
 
-        public override PacketType Type
-        { get { return PacketType.PIC; } }
+        public override PacketType Type => PacketType.PIC;
 
         public override void Read(PacketReader r)
         {
-            BitmapData = (BitmapData)BitmapData.Read(r);
+            BitmapData = (BitmapData) BitmapData.Read(r);
         }
 
         public override void Write(PacketWriter w)

@@ -1,28 +1,28 @@
 ﻿using Lib_K_Relay.Networking.Packets.DataObjects;
+using Lib_K_Relay.Utilities;
 
 namespace Lib_K_Relay.Networking.Packets.Server
 {
     public class ServerPlayerShootPacket : Packet
     {
-        public byte BulletId;
-        public int OwnerId;
-        public int ContainerType;
-        public Location StartingLoc;
         public float Angle;
+        public byte BulletId;
+        public int ContainerType;
         public short Damage;
+        public int OwnerId;
+        public Location StartingLoc;
         public int Unknown1;
         public byte ShotCount;
         public int Unknown2;
 
-        public override PacketType Type
-        { get { return PacketType.SERVER_PLAYER_SHOOT; } }
+        public override PacketType Type => PacketType.SERVERPLAYERSHOOT;
 
         public override void Read(PacketReader r)
         {
             BulletId = r.ReadByte();
             OwnerId = r.ReadInt32();
             ContainerType = r.ReadInt32();
-            StartingLoc = (Location)new Location().Read(r);
+            StartingLoc = (Location) new Location().Read(r);
             Angle = r.ReadSingle();
             Damage = r.ReadInt16();
             Unknown1 = r.ReadInt32();

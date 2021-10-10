@@ -8,7 +8,9 @@ namespace Lib_K_Relay.Networking.Packets
     public class PacketReader : BinaryReader
     {
         public PacketReader(MemoryStream input)
-            : base(input, Encoding.UTF8) { }
+            : base(input, Encoding.UTF8)
+        {
+        }
 
         public override short ReadInt16()
         {
@@ -17,7 +19,7 @@ namespace Lib_K_Relay.Networking.Packets
 
         public override ushort ReadUInt16()
         {
-            return (ushort)IPAddress.NetworkToHostOrder((short)base.ReadUInt16());
+            return (ushort) IPAddress.NetworkToHostOrder((short) base.ReadUInt16());
         }
 
         public override int ReadInt32()
@@ -27,7 +29,7 @@ namespace Lib_K_Relay.Networking.Packets
 
         public override float ReadSingle()
         {
-            byte[] arr = base.ReadBytes(4);
+            var arr = base.ReadBytes(4);
             Array.Reverse(arr);
             return BitConverter.ToSingle(arr, 0);
         }
@@ -43,4 +45,3 @@ namespace Lib_K_Relay.Networking.Packets
         }
     }
 }
-;

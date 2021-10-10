@@ -5,8 +5,7 @@
         public int ObjectId;
         public int Quantity;
 
-        public override PacketType Type
-        { get { return PacketType.BUY; } }
+        public override PacketType Type => PacketType.BUY;
 
         public override void Read(PacketReader r)
         {

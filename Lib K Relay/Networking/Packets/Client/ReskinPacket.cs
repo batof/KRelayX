@@ -4,8 +4,7 @@
     {
         public int SkinId;
 
-        public override PacketType Type
-        { get { return PacketType.RESKIN; } }
+        public override PacketType Type => PacketType.RESKIN;
 
         public override void Read(PacketReader r)
         {

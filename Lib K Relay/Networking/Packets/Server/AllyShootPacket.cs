@@ -2,20 +2,21 @@
 {
     public class AllyShootPacket : Packet
     {
-        public byte BulletId;
-        public int OwnerId;
-        public short ContainerType;
         public float Angle;
+        public byte BulletId;
+        public ushort ContainerType;
+        public bool IsBard;
+        public int OwnerId;
 
-        public override PacketType Type
-        { get { return PacketType.ALLYSHOOT; } }
+        public override PacketType Type => PacketType.ALLYSHOOT;
 
         public override void Read(PacketReader r)
         {
             BulletId = r.ReadByte();
             OwnerId = r.ReadInt32();
-            ContainerType = r.ReadInt16();
+            ContainerType = r.ReadUInt16();
             Angle = r.ReadSingle();
+            IsBard = r.ReadBoolean();
         }
 
         public override void Write(PacketWriter w)
@@ -24,6 +25,7 @@
             w.Write(OwnerId);
             w.Write(ContainerType);
             w.Write(Angle);
+            w.Write(IsBard);
         }
     }
 }

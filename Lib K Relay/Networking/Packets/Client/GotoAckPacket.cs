@@ -4,8 +4,7 @@
     {
         public int Time;
 
-        public override PacketType Type
-        { get { return PacketType.GOTOACK; } }
+        public override PacketType Type => PacketType.GOTOACK;
 
         public override void Read(PacketReader r)
         {

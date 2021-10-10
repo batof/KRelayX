@@ -1,73 +1,90 @@
-﻿using Lib_K_Relay.Networking.Packets.Server;
-using Lib_K_Relay.Utilities;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Text;
+using Lib_K_Relay.Networking.Packets.Server;
+using Lib_K_Relay.Utilities;
 
-namespace Lib_K_Relay.Networking.Packets.DataObjects
-{
+namespace Lib_K_Relay.Networking.Packets.DataObjects {
     public class PlayerData // TODO: Add the rest of the stats
     {
-        public int OwnerObjectId;
-        public string MapName;
-        public bool TeleportAllowed;
-        public int MapWidth;
-        public int MapHeight;
-
-        public int MaxHealth;
-        public int Health;
-        public int MaxMana;
-        public int Mana;
-        public int XpGoal;
-        public int Xp;
-        public int Level = 1;
-        public int[] Slot = { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
-        public int[] BackPack = { -1, -1, -1, -1, -1, -1, -1, -1 };
-        public int Attack;
-        public int Defense;
-        public int Speed;
-        public int Vitality;
-        public int Wisdom;
-        public int Dexterity;
-        public int Effects;
-        public int Stars;
-        public string Name;
-        public int RealmGold;
-        public int Price;
-        public bool CanEnterPortal;
-        public string AccountId;
         public int AccountFame;
-        public int HealthBonus;
-        public int ManaBonus;
+        public string AccountId;
+        // future-proofing: technically a possible Player value, but never ends up being one
+        public int AltTextureIndex;
+        public int Attack;
         public int AttackBonus;
-        public int DefenseBonus;
-        public int SpeedBonus;
-        public int VitalityBonus;
-        public int WisdomBonus;
-        public int DexterityBonus;
-        public int NameChangeRankRequired;
-        public bool NameChosen;
+        public int[] Backpack = { -1, -1, -1, -1, -1, -1, -1, -1 };
+        public int Breath;
+        public int ChallengerStarBg;
         public int CharacterFame;
         public int CharacterFameGoal;
-        public bool GlowingEffect;
+        public Classes Class;
+        public int Defense;
+        public int DefenseBonus;
+        public int Dexterity;
+        public int DexterityBonus;
+        public int[] Effects = new int[2];
+        public float ExaltationDamageMultiplier;
+        public int ExaltedAttack;
+        public int ExaltedDefense;
+        public int ExaltedDexterity;
+        public int ExaltedHealth;
+        public int ExaltedMana;
+        public int ExaltedSpeed;
+        public int ExaltedVitality;
+        public int ExaltedWisdom;
+        public int Forgefire;
+        public int FortuneTokens;
         public string GuildName;
         public int GuildRank;
-        public int Breath;
-        public int HealthPotionCount;
-        public int MagicPotionCount;
         public bool HasBackpack;
-        public int Skin;
+        public bool HasQuickslotUpgrade;
+        public bool HasXpBoost;
+        public int Health;
+        public int HealthBonus;
+        public int[] Inventory = { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
+        public int LegendaryRank;
+        public int Level = 1;
+        public int LootDropBoostTime;
+        public int LootTierBoostTime;
+        public int Mana;
+        public int ManaBonus;
+        public int MapHeight;
+        public string MapName;
+        public int MapWidth;
+        public int MaxHealth;
+        public int MaxMana;
+        public string Name;
+        public bool NameChosen;
+        public int OwnerObjectId;
         public Location Pos = new Location();
-        // Custom
-        public Classes Class;
+        public float ProjectileSpeedMultiplier;
+        public float ProjectileLifeMultiplier;
+        public int[] Quickslots = { -1, -1, -1 };
+        public int RealmGold;
+        public int SinkLevel;
+        public int Skin;
+        public int Size;
+        public int Speed;
+        public int SpeedBonus;
+        public int Stars;
+        public int SupporterPoints;
+        public bool TeleportAllowed;
+        public int Texture1;
+        public int Texture2;
+        public int Vitality;
+        public int VitalityBonus;
+        public int Wisdom;
+        public int WisdomBonus;
+        public int Xp;
+        public int XpBoostTime;
+        public int XpGoal;
 
-        public PlayerData(int ownerObjectId)
-        {
+        public PlayerData(int ownerObjectId) {
             OwnerObjectId = ownerObjectId;
             Name = "";
         }
 
-        public PlayerData(int ownerObjectId, MapInfoPacket mapInfo)
-        {
+        public PlayerData(int ownerObjectId, MapInfoPacket mapInfo) {
             OwnerObjectId = ownerObjectId;
             Name = "";
             MapName = mapInfo.Name;
@@ -76,116 +93,259 @@ namespace Lib_K_Relay.Networking.Packets.DataObjects
             MapHeight = mapInfo.Height;
         }
 
-        public void Parse(UpdatePacket update)
-        {
-            foreach (Entity newObject in update.NewObjs)
-                if (newObject.Status.ObjectId == OwnerObjectId)
-                {
+        public void Parse(UpdatePacket update) {
+            foreach (var newObject in update.NewObjs)
+                if (newObject.Status.ObjectId == OwnerObjectId) {
                     Class = (Classes)newObject.ObjectType;
-                    foreach (StatData data in newObject.Status.Data)
-                        Parse(data.Id, data.IntValue, data.StringValue);
+                    foreach (var data in newObject.Status.Data) Parse(data.Id, data.IntValue, data.StringValue);
                 }
         }
 
-        public void Parse(NewTickPacket newTick)
-        {
-            foreach (Status status in newTick.Statuses)
+        public void Parse(NewTickPacket newTick) {
+            foreach (var status in newTick.Statuses)
                 if (status.ObjectId == OwnerObjectId)
-                    foreach (StatData data in status.Data)
-                    {
+                    foreach (var data in status.Data) {
                         Pos = status.Position;
                         Parse(data.Id, data.IntValue, data.StringValue);
                     }
         }
 
-        public void Parse(int id, int intValue, string stringValue)
-        {
-            if (id == StatsType.MaximumHP) MaxHealth = intValue;
-            else if (id == StatsType.HP) Health = intValue;
-            else if (id == StatsType.MaximumMP) MaxMana = intValue;
-            else if (id == StatsType.MP) Mana = intValue;
-            else if (id == StatsType.NextLevelExperience) XpGoal = intValue;
-            else if (id == StatsType.Experience) Xp = intValue;
-            else if (id == StatsType.Level) Level = intValue;
-            else if (id == StatsType.Inventory0) Slot[0] = intValue;
-            else if (id == StatsType.Inventory1) Slot[1] = intValue;
-            else if (id == StatsType.Inventory2) Slot[2] = intValue;
-            else if (id == StatsType.Inventory3) Slot[3] = intValue;
-            else if (id == StatsType.Inventory4) Slot[4] = intValue;
-            else if (id == StatsType.Inventory5) Slot[5] = intValue;
-            else if (id == StatsType.Inventory6) Slot[6] = intValue;
-            else if (id == StatsType.Inventory7) Slot[7] = intValue;
-            else if (id == StatsType.Inventory8) Slot[8] = intValue;
-            else if (id == StatsType.Inventory9) Slot[9] = intValue;
-            else if (id == StatsType.Inventory10) Slot[10] = intValue;
-            else if (id == StatsType.Inventory11) Slot[11] = intValue;
-            else if (id == StatsType.Attack) Attack = intValue;
-            else if (id == StatsType.Defense) Defense = intValue;
-            else if (id == StatsType.Speed) Speed = intValue;
-            else if (id == StatsType.Vitality) Vitality = intValue;
-            else if (id == StatsType.Wisdom) Wisdom = intValue;
-            else if (id == StatsType.Dexterity) Dexterity = intValue;
-            else if (id == StatsType.Effects) Effects = intValue;
-            else if (id == StatsType.Stars) Stars = intValue;
-            else if (id == StatsType.Name) Name = stringValue;
-            else if (id == StatsType.Credits) RealmGold = intValue;
-            else if (id == StatsType.MerchandisePrice) Price = intValue;
-            //else if (id == 37) CanEnterPortal = bool.Parse(stringValue);
-            else if (id == StatsType.AccountId) AccountId = stringValue;
-            else if (id == StatsType.AccountFame) AccountFame = intValue; //fame you got when you died
-            else if (id == StatsType.HealthBonus) HealthBonus = intValue;
-            else if (id == StatsType.ManaBonus) ManaBonus = intValue;
-            else if (id == StatsType.AttackBonus) AttackBonus = intValue;
-            else if (id == StatsType.DefenseBonus) DefenseBonus = intValue;
-            else if (id == StatsType.SpeedBonus) SpeedBonus = intValue;
-            else if (id == StatsType.VitalityBonus) VitalityBonus = intValue;
-            else if (id == StatsType.WisdomBonus) WisdomBonus = intValue;
-            else if (id == StatsType.DexterityBonus) DexterityBonus = intValue;
-            else if (id == StatsType.RankRequired) NameChangeRankRequired = intValue;
-            else if (id == StatsType.NameChosen) NameChosen = intValue > 0;
-            else if (id == StatsType.CharacterFame) CharacterFame = intValue; //fame on this character
-            else if (id == StatsType.CharacterFameGoal) CharacterFameGoal = intValue;
-            else if (id == StatsType.Glowing) GlowingEffect = intValue > -1;
-            else if (id == StatsType.GuildName) GuildName = stringValue;
-            else if (id == StatsType.GuildRank) GuildRank = intValue;
-            else if (id == StatsType.OxygenBar) Breath = intValue;
-            else if (id == StatsType.HealthPotionCount) HealthPotionCount = intValue;
-            else if (id == StatsType.MagicPotionCount) MagicPotionCount = intValue;
-            else if (id == StatsType.Backpack0) BackPack[0] = intValue;
-            else if (id == StatsType.Backpack1) BackPack[1] = intValue;
-            else if (id == StatsType.Backpack2) BackPack[2] = intValue;
-            else if (id == StatsType.Backpack3) BackPack[3] = intValue;
-            else if (id == StatsType.Backpack4) BackPack[4] = intValue;
-            else if (id == StatsType.Backpack5) BackPack[5] = intValue;
-            else if (id == StatsType.Backpack6) BackPack[6] = intValue;
-            else if (id == StatsType.Backpack7) BackPack[7] = intValue;
-            else if (id == StatsType.HasBackpack) HasBackpack = intValue > 0;
-            else if (id == StatsType.Skin) Skin = intValue;
+        public void Parse(int id, int intValue, string stringValue) {
+            switch (id) {
+                case (int)Stats.MaximumHP:
+                    MaxHealth = intValue;
+                    break;
+                case (int)Stats.HP:
+                    Health = intValue;
+                    break;
+                case (int)Stats.MaximumMP:
+                    MaxMana = intValue;
+                    break;
+                case (int)Stats.MP:
+                    Mana = intValue;
+                    break;
+                case (int)Stats.NextLevelExperience:
+                    XpGoal = intValue;
+                    break;
+                case (int)Stats.Experience:
+                    Xp = intValue;
+                    break;
+                case (int)Stats.Level:
+                    Level = intValue;
+                    break;
+                case (int)Stats.Inventory0:
+                case (int)Stats.Inventory1:
+                case (int)Stats.Inventory2:
+                case (int)Stats.Inventory3:
+                case (int)Stats.Inventory4:
+                case (int)Stats.Inventory5:
+                case (int)Stats.Inventory6:
+                case (int)Stats.Inventory7:
+                case (int)Stats.Inventory8:
+                case (int)Stats.Inventory9:
+                case (int)Stats.Inventory10:
+                case (int)Stats.Inventory11:
+                    Inventory[id - (int)Stats.Inventory0] = intValue;
+                    break;
+                case (int)Stats.Backpack0:
+                case (int)Stats.Backpack1:
+                case (int)Stats.Backpack2:
+                case (int)Stats.Backpack3:
+                case (int)Stats.Backpack4:
+                case (int)Stats.Backpack5:
+                case (int)Stats.Backpack6:
+                case (int)Stats.Backpack7:
+                    Backpack[id - (int)Stats.Backpack0] = intValue;
+                    break;
+                case (int)Stats.Attack:
+                    Attack = intValue;
+                    break;
+                case (int)Stats.Defense:
+                    Defense = intValue;
+                    break;
+                case (int)Stats.Speed:
+                    Speed = intValue;
+                    break;
+                case (int)Stats.Vitality:
+                    Vitality = intValue;
+                    break;
+                case (int)Stats.Wisdom:
+                    Wisdom = intValue;
+                    break;
+                case (int)Stats.Dexterity:
+                    Dexterity = intValue;
+                    break;
+                case (int)Stats.Effects:
+                    Effects[0] = intValue;
+                    break;
+                case (int)Stats.Effects2:
+                    Effects[1] = intValue;
+                    break;
+                case (int)Stats.Stars:
+                    Stars = intValue;
+                    break;
+                case (int)Stats.Name:
+                    Name = stringValue;
+                    break;
+                case (int)Stats.Credits:
+                    RealmGold = intValue;
+                    break;
+                case (int)Stats.AccountId:
+                    AccountId = stringValue;
+                    break;
+                case (int)Stats.AccountFame:
+                    AccountFame = intValue;
+                    break;
+                case (int)Stats.HealthBonus:
+                    HealthBonus = intValue;
+                    break;
+                case (int)Stats.ManaBonus:
+                    ManaBonus = intValue;
+                    break;
+                case (int)Stats.AttackBonus:
+                    AttackBonus = intValue;
+                    break;
+                case (int)Stats.DefenseBonus:
+                    DefenseBonus = intValue;
+                    break;
+                case (int)Stats.SpeedBonus:
+                    SpeedBonus = intValue;
+                    break;
+                case (int)Stats.VitalityBonus:
+                    VitalityBonus = intValue;
+                    break;
+                case (int)Stats.WisdomBonus:
+                    WisdomBonus = intValue;
+                    break;
+                case (int)Stats.DexterityBonus:
+                    DexterityBonus = intValue;
+                    break;
+                case (int)Stats.NameChosen:
+                    NameChosen = intValue > 0;
+                    break;
+                case (int)Stats.CharacterFame:
+                    CharacterFame = intValue;
+                    break;
+                case (int)Stats.CharacterFameGoal:
+                    CharacterFameGoal = intValue;
+                    break;
+                case (int)Stats.LegendaryRank:
+                    LegendaryRank = intValue;
+                    break;
+                case (int)Stats.GuildName:
+                    GuildName = stringValue;
+                    break;
+                case (int)Stats.GuildRank:
+                    GuildRank = intValue;
+                    break;
+                case (int)Stats.Breath:
+                    Breath = intValue;
+                    break;
+                case (int)Stats.HasBackpack:
+                    HasBackpack = intValue > 0;
+                    break;
+                case (int)Stats.Skin:
+                    Skin = intValue;
+                    break;
+                case (int)Stats.SinkLevel:
+                    SinkLevel = intValue;
+                    break;
+                case (int)Stats.Size:
+                    Size = intValue;
+                    break;
+                case (int)Stats.QuickslotItem1:
+                case (int)Stats.QuickslotItem2:
+                case (int)Stats.QuickslotItem3:
+                    Quickslots[id - (int)Stats.QuickslotItem1] = intValue;
+                    break;
+                case (int)Stats.HasQuickslotUpgrade:
+                    HasQuickslotUpgrade = intValue > 0;
+                    break;
+                case (int)Stats.ExaltedAttack:
+                    ExaltedAttack = intValue;
+                    break;
+                case (int)Stats.ExaltedDefense:
+                    ExaltedDefense = intValue;
+                    break;
+                case (int)Stats.ExaltedDexterity:
+                    ExaltedDexterity = intValue;
+                    break;
+                case (int)Stats.ExaltedHealth:
+                    ExaltedHealth = intValue;
+                    break;
+                case (int)Stats.ExaltedMana:
+                    ExaltedMana = intValue;
+                    break;
+                case (int)Stats.ExaltedSpeed:
+                    ExaltedSpeed = intValue;
+                    break;
+                case (int)Stats.ExaltedVitality:
+                    ExaltedVitality = intValue;
+                    break;
+                case (int)Stats.ExaltedWisdom:
+                    ExaltedWisdom = intValue;
+                    break;
+                case (int)Stats.Texture1:
+                    Texture1 = intValue;
+                    break;
+                case (int)Stats.Texture2:
+                    Texture2 = intValue;
+                    break;
+                case (int)Stats.FortuneTokens:
+                    FortuneTokens = intValue;
+                    break;
+                case (int)Stats.Forgefire:
+                    Forgefire = intValue;
+                    break;
+                case (int)Stats.ExaltationDamageMultiplier:
+                    ExaltationDamageMultiplier = intValue / 1000f;
+                    break;
+                case (int)Stats.SupporterPoints:
+                    SupporterPoints = intValue;
+                    break;
+                case (int)Stats.ProjectileSpeedMult:
+                    ProjectileSpeedMultiplier = intValue / 1000f;
+                    break;
+                case (int)Stats.ProjectileLifeMult:
+                    ProjectileLifeMultiplier = intValue / 1000f;
+                    break;
+                case (int)Stats.AltTextureIndex:
+                    AltTextureIndex = intValue;
+                    break;
+                case (int)Stats.HasXpBoost:
+                    HasXpBoost = intValue > 0;
+                    break;
+                case (int)Stats.XpBoostTime:
+                    XpBoostTime = intValue * 1000;
+                    break;
+                case (int)Stats.LootDropBoostTime:
+                    LootDropBoostTime = intValue * 1000;
+                    break;
+                case (int)Stats.LootTierBoostTime:
+                    LootTierBoostTime = intValue * 1000;
+                    break;
+                case (int)Stats.ChallengerStarBg:
+                    ChallengerStarBg = intValue;
+                    break;
+            }
         }
 
-        public bool HasConditionEffect(ConditionEffects effect)
-        {
-            return (Effects & (int)effect) != 0;
+        public bool HasConditionEffect(ConditionEffectIndex effect) {
+            return (int)effect > 30 ? (Effects[1] & (int)effect) != 0 : (Effects[0] & (int)effect) != 0;
         }
 
-        public float TilesPerTick()
-        {
-            // Ticks per second = 5
-            return (4.0f + 5.6f * (Speed / 75.0f)) / 5.0f;
-        }
-
-        public override string ToString()
-        {
+        public override string ToString() {
             // Use reflection to get the the non-null fields and arrange them into a table.
-            FieldInfo[] fields = GetType().GetFields(BindingFlags.Public |
-                                              BindingFlags.NonPublic |
-                                              BindingFlags.Instance);
+            var fields = GetType().GetFields(BindingFlags.Public |
+                                             BindingFlags.NonPublic |
+                                             BindingFlags.Instance);
 
-            StringBuilder s = new StringBuilder();
+            var s = new StringBuilder();
             s.Append(OwnerObjectId + "'s PlayerData Instance");
-            foreach (FieldInfo f in fields)
+            foreach (var f in fields)
                 if (f.GetValue(this) != null)
                     s.Append("\n\t" + f.Name + " => " + f.GetValue(this));
+
             return s.ToString();
         }
     }

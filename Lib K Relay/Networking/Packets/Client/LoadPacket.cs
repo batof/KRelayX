@@ -5,8 +5,7 @@
         public int CharacterId;
         public bool IsFromArena;
 
-        public override PacketType Type
-        { get { return PacketType.LOAD; } }
+        public override PacketType Type => PacketType.LOAD;
 
         public override void Read(PacketReader r)
         {
