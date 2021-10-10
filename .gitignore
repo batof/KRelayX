@@ -4,6 +4,7 @@
 # IDE
 .vscode/
 .idea/
+.git/
 
 # User-specific files
 *.suo
