@@ -5,7 +5,7 @@ namespace Lib_K_Relay.Utilities
 {
     public partial class FrmGenericSettings : Form
     {
-        private dynamic _settings;
+        private readonly dynamic _settings;
 
         public FrmGenericSettings()
         {
@@ -16,7 +16,7 @@ namespace Lib_K_Relay.Utilities
         {
             InitializeComponent();
             _settings = settingsObject;
-            this.Text = title;
+            Text = title;
 
             gridSettings.SelectedObject = _settings;
         }
@@ -24,12 +24,13 @@ namespace Lib_K_Relay.Utilities
         private void btnDone_Click(object sender, EventArgs e)
         {
             _settings.Save();
-            this.Close();
+            Close();
         }
 
         private void btnReset_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Are you sure you want to reset the settings to default?", "K Relay", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (MessageBox.Show("Are you sure you want to reset the settings to default?", "K Relay",
+                MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 _settings.Reset();
                 _settings.Save();

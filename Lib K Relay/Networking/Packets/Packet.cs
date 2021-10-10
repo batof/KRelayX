@@ -210,7 +210,6 @@ namespace Lib_K_Relay.Networking.Packets {
         // not actually needed, chat server is separate
         CHAT_HELLO_MSG,
         CHAT_TOKEN_MSG,
-        //
 
         UNDEFINED
     }

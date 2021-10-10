@@ -1,22 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Xml.Linq;
 
 namespace Lib_K_Relay.GameData
 {
-
     /// <summary>
-    /// A bunch of simple extensions to make parsing simpler
+    ///     A bunch of simple extensions to make parsing simpler
     /// </summary>
     public static class ParsingHelpers
     {
         public static IEnumerable<T> ForEach<T>(this IEnumerable<T> input, Action<T> action)
         {
-            foreach (T element in input)
-            {
-                action(element);
-            }
+            foreach (var element in input) action(element);
             return input;
         }
 
@@ -42,12 +39,12 @@ namespace Lib_K_Relay.GameData
 
         public static int ParseInt(this string input)
         {
-            return int.Parse(input, System.Globalization.CultureInfo.InvariantCulture);
+            return int.Parse(input, CultureInfo.InvariantCulture);
         }
 
         public static float ParseFloat(this string input)
         {
-            return float.Parse(input, System.Globalization.CultureInfo.InvariantCulture);
+            return float.Parse(input, CultureInfo.InvariantCulture);
         }
     }
 }

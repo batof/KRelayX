@@ -19,7 +19,7 @@ namespace Lib_K_Relay.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -61,26 +61,28 @@ namespace Lib_K_Relay.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;Objects&gt;
-        ///
-        ///&lt;!-- AbyssOfDemons --&gt;
-        ///
-        ///
-        ///   &lt;Object type=&quot;0x0908&quot; id=&quot;Malphas Protector&quot;&gt;
-        ///      &lt;Group&gt;Demons&lt;/Group&gt;
-        ///      &lt;Enemy/&gt;
-        ///      &lt;Class&gt;Character&lt;/Class&gt;
-        ///      &lt;AnimatedTexture&gt;
-        ///         &lt;File&gt;chars8x8rHero1&lt;/File&gt;
-        ///         &lt;Index&gt;0x13&lt;/Index&gt;
-        ///      &lt;/AnimatedTexture&gt;
-        ///      &lt;HitSound&gt;monster/demons_hit&lt;/HitSound&gt;
-        ///      &lt;DeathSound&gt;monster/demons_death&lt;/DeathSound&gt;
-        ///      &lt;Size&gt;100&lt;/Size&gt;
-        ///      &lt;MaxHitPoints&gt;900&lt;/MaxHitPoints&gt;
-        ///      &lt;Defense&gt;7&lt;/Defense&gt;
-        ///      &lt;XpMult&gt;0.1&lt;/XpMult&gt;
-        ///      &lt;Projectile id=&quot;0&quot; [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;Objects&gt;
+        ///  &lt;Object type=&quot;0x0715&quot; id=&quot;Decoy&quot;&gt;
+        ///    &lt;Class&gt;Character&lt;/Class&gt;
+        ///    &lt;AnimatedTexture&gt;
+        ///      &lt;File&gt;players&lt;/File&gt;
+        ///      &lt;Index&gt;11&lt;/Index&gt;
+        ///    &lt;/AnimatedTexture&gt;
+        ///    &lt;Friendly /&gt;
+        ///    &lt;CanUseTexes /&gt;
+        ///    &lt;NoMiniMap /&gt;
+        ///  &lt;/Object&gt;
+        ///  &lt;Object type=&quot;0x755f&quot; id=&quot;Dire Decoy&quot;&gt;
+        ///    &lt;Class&gt;Character&lt;/Class&gt;
+        ///    &lt;Texture&gt;
+        ///      &lt;File&gt;d3LofiObjEmbed&lt;/File&gt;
+        ///      &lt;Index&gt;0x2c&lt;/Index&gt;
+        ///    &lt;/Texture&gt;
+        ///    &lt;Friendly /&gt;
+        ///    &lt;NoMiniMap /&gt;
+        ///  &lt;/Object&gt;
+        ///  &lt;Object type=&quot;0xb101&quot; id=&quot;G [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Objects {
             get {
@@ -89,32 +91,21 @@ namespace Lib_K_Relay.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;Packets&gt;
-        ///&lt;Packet&gt;
-        ///	&lt;PacketName&gt;FAILURE&lt;/PacketName&gt;
-        ///	&lt;PacketID&gt;0&lt;/PacketID&gt;
-        ///&lt;/Packet&gt;
-        ///&lt;Packet&gt;
-        ///	&lt;PacketName&gt;CREATESUCCESS&lt;/PacketName&gt;
-        ///	&lt;PacketID&gt;86&lt;/PacketID&gt;
-        ///&lt;/Packet&gt;
-        ///&lt;Packet&gt;
-        ///	&lt;PacketName&gt;CREATE&lt;/PacketName&gt;
-        ///	&lt;PacketID&gt;90&lt;/PacketID&gt;
-        ///&lt;/Packet&gt;
-        ///&lt;Packet&gt;
-        ///	&lt;PacketName&gt;PLAYERSHOOT&lt;/PacketName&gt;
-        ///	&lt;PacketID&gt;16&lt;/PacketID&gt;
-        ///&lt;/Packet&gt;
-        ///&lt;Packet&gt;
-        ///	&lt;PacketName&gt;MOVE&lt;/PacketName&gt;
-        ///	&lt;PacketID&gt;14&lt;/PacketID&gt;
-        ///&lt;/Packet&gt;
-        ///&lt;Packet&gt;
-        ///	&lt;PacketName&gt;PLAYERTEXT&lt;/PacketName&gt;
-        ///	&lt;PacketID&gt;67&lt;/PacketID&gt;
-        ///&lt;/Packet&gt;
-        ///&lt; [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;Packets&gt;
+        ///	&lt;Packet id=&quot;FAILURE&quot; type=&quot;0&quot; /&gt;
+        ///	&lt;Packet id=&quot;CREATE_SUCCESS&quot; type=&quot;101&quot; /&gt;
+        ///	&lt;Packet id=&quot;CREATE&quot; type=&quot;61&quot; /&gt;
+        ///	&lt;Packet id=&quot;PLAYERSHOOT&quot; type=&quot;30&quot; /&gt;
+        ///	&lt;Packet id=&quot;MOVE&quot; type=&quot;42&quot; /&gt;
+        ///	&lt;Packet id=&quot;PLAYERTEXT&quot; type=&quot;10&quot; /&gt;
+        ///	&lt;Packet id=&quot;TEXT&quot; type=&quot;44&quot; /&gt;
+        ///	&lt;Packet id=&quot;SERVERPLAYERSHOOT&quot; type=&quot;12&quot; /&gt;
+        ///	&lt;Packet id=&quot;DAMAGE&quot; type=&quot;75&quot; /&gt;
+        ///	&lt;Packet id=&quot;UPDATE&quot; type=&quot;62&quot; /&gt;
+        ///	&lt;Packet id=&quot;UPDATEACK&quot; type=&quot;81&quot; /&gt;
+        ///	&lt;Packet id=&quot;NOTIFICATION&quot; type=&quot;67&quot; /&gt;
+        ///	&lt;Packet id=&quot;NEWTICK&quot; [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Packets {
             get {
@@ -123,28 +114,61 @@ namespace Lib_K_Relay.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;GroundTypes&gt;
-        ///
-        ///&lt;!-- Ground --&gt;
-        ///
-        ///
-        ///   &lt;Ground type=&quot;0x00&quot; id=&quot;Black Water&quot;&gt;
-        ///      &lt;Texture&gt;
-        ///         &lt;File&gt;lofiEnvironment2&lt;/File&gt;
-        ///         &lt;Index&gt;0x09&lt;/Index&gt;
-        ///      &lt;/Texture&gt;
-        ///      &lt;Animate dx=&quot;.5&quot; dy=&quot;.5&quot;&gt;Wave&lt;/Animate&gt;
-        ///      &lt;NoWalk/&gt;
-        ///      &lt;Speed&gt;1&lt;/Speed&gt;
-        ///   &lt;/Ground&gt;
-        ///   &lt;Ground type=&quot;0x17&quot; id=&quot;Black Water Light&quot;&gt;
-        ///      &lt;Texture&gt;
-        ///         &lt;File&gt;lofiEnvironment2&lt;/File&gt;
-        ///         &lt;Index&gt;0x0a&lt;/Index&gt;
-        ///      &lt;/Texture&gt;
-        ///      &lt;Animate dx=&quot;0.5&quot; dy=&quot;0.5&quot;&gt;Wave&lt;/Animate&gt;
-        ///      &lt;Sink/&gt;
-        ///      &lt;BlendPriority&gt;2&lt;/Blend [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+        ///&lt;Servers&gt;
+        ///	&lt;Server&gt;
+        ///		&lt;Name&gt;USEast2&lt;/Name&gt;
+        ///		&lt;DNS&gt;52.87.248.5&lt;/DNS&gt;
+        ///		&lt;Lat&gt;42.89&lt;/Lat&gt;
+        ///		&lt;Long&gt;-78.88&lt;/Long&gt;
+        ///		&lt;Usage&gt;0.00&lt;/Usage&gt;
+        ///	&lt;/Server&gt;
+        ///	&lt;Server&gt;
+        ///		&lt;Name&gt;EUEast&lt;/Name&gt;
+        ///		&lt;DNS&gt;18.184.218.174&lt;/DNS&gt;
+        ///		&lt;Lat&gt;54.69&lt;/Lat&gt;
+        ///		&lt;Long&gt;25.28&lt;/Long&gt;
+        ///		&lt;Usage&gt;0.00&lt;/Usage&gt;
+        ///	&lt;/Server&gt;
+        ///	&lt;Server&gt;
+        ///		&lt;Name&gt;EUSouthWest&lt;/Name&gt;
+        ///		&lt;DNS&gt;35.180.67.120&lt;/DNS&gt;
+        ///		&lt;Lat&gt;48.86&lt;/Lat&gt;
+        ///		&lt;Long&gt;2.35&lt;/Long&gt;
+        ///		&lt;Usage&gt;0.00&lt;/Usage&gt;
+        ///	&lt;/Server&gt;
+        ///	&lt;Server&gt;
+        ///		&lt;Name&gt;EUNorth&lt;/Name&gt;
+        ///		&lt;D [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Servers {
+            get {
+                return ResourceManager.GetString("Servers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;GroundTypes&gt;
+        ///	&lt;Ground type=&quot;0xb005&quot; id=&quot;Abyss Lava&quot;&gt;
+        ///		&lt;Texture&gt;
+        ///			&lt;File&gt;abyssOfDemonsObjects8x8&lt;/File&gt;
+        ///			&lt;Index&gt;0x03&lt;/Index&gt;
+        ///		&lt;/Texture&gt;
+        ///		&lt;MinDamage&gt;60&lt;/MinDamage&gt;
+        ///		&lt;MaxDamage&gt;60&lt;/MaxDamage&gt;
+        ///		&lt;Animate dx=&quot;.33&quot; dy=&quot;.33&quot;&gt;Flow&lt;/Animate&gt;
+        ///		&lt;Sink /&gt;
+        ///		&lt;Speed&gt;.666&lt;/Speed&gt;
+        ///		&lt;Color&gt;0xF2711A&lt;/Color&gt;
+        ///	&lt;/Ground&gt;
+        ///	&lt;Ground type=&quot;0xb004&quot; id=&quot;Abyss Volcanic Tile&quot;&gt;
+        ///		&lt;RandomTexture&gt;
+        ///			&lt;Texture&gt;
+        ///				&lt;File&gt;abyssOfDemonsObjects8x8&lt;/File&gt;
+        ///				&lt;Index&gt;0x40&lt;/Index&gt;
+        ///			&lt;/Texture&gt;
+        ///		 [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Tiles {
             get {

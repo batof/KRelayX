@@ -1,75 +1,35 @@
+using System;
+using System.IO;
+using System.Net;
+using System.Net.Sockets;
 using Lib_K_Relay.Crypto;
 using Lib_K_Relay.Networking.Packets;
 using Lib_K_Relay.Networking.Packets.Client;
 using Lib_K_Relay.Networking.Packets.DataObjects;
 using Lib_K_Relay.Utilities;
-using System;
-using System.IO;
-using System.Net;
-using System.Net.Sockets;
 
 namespace Lib_K_Relay.Networking
 {
     public class Client
     {
-        private static readonly string IncomingKey = "311f80691451c71d09a13a2a6e";  // incoming RC4 key
-        private static readonly string OutgoingKey = "72c5583cafb6818995cdd74b80";  // outgoing RC4 key
-        public int LastUpdate = 0;  // the time the last UPDATE packet was received
-        public int PreviousTime = 0;  // the time of the last sent MOVE packet to the server
-        private object _serverLock = new object();  // server packet IO mutex
-        private object _clientLock = new object();  // client packet IO mutex
-        private RC4Cipher _clientReceiveState = new RC4Cipher(IncomingKey);  // client outgoing RC4 cipher
-        private RC4Cipher _serverReceiveState = new RC4Cipher(OutgoingKey);  // server outgoing RC4 cipher
-        private RC4Cipher _clientSendState = new RC4Cipher(OutgoingKey);  // client incoming RC4 cipher
-        private RC4Cipher _serverSendState = new RC4Cipher(IncomingKey);  // server incoming RC4 cipher
-        private PacketBuffer _clientBuffer = new PacketBuffer();  // client packet buffer
-        private PacketBuffer _serverBuffer = new PacketBuffer();  // server packet buffer 
-        private TcpClient _clientConnection;  // the underlying local client connection
-        private TcpClient _serverConnection;  // the underling remote connection to the game server
-        private NetworkStream _clientStream;
+        private static readonly string ClientKey = "5a4d2016bc16dc64883194ffd9";
+        private static readonly string ServerKey = "c91d9eec420160730d825604e0";
+        private readonly PacketBuffer _clientBuffer = new PacketBuffer();
+        private readonly TcpClient _clientConnection;
+        private readonly object _clientLock = new object();
+        private readonly RC4Cipher _clientReceiveState = new RC4Cipher(ClientKey);
+        private readonly RC4Cipher _clientSendState = new RC4Cipher(ServerKey);
+        private readonly NetworkStream _clientStream;
+        private bool _closed;
+        private readonly Proxy _proxy;
+        private readonly PacketBuffer _serverBuffer = new PacketBuffer();
+        private TcpClient _serverConnection;
+        private readonly object _serverLock = new object();
+        private readonly RC4Cipher _serverReceiveState = new RC4Cipher(ServerKey);
+        private readonly RC4Cipher _serverSendState = new RC4Cipher(ClientKey);
         private NetworkStream _serverStream;
-        private bool _closed = false;  // whether the proxy connection is closed
-        private Proxy _proxy;  // the Proxy interface
-
-        /// <summary>
-        /// Time since the client's connection began.
-        /// </summary>
-        public int Time
-        {
-            get { return PreviousTime + (Environment.TickCount - LastUpdate); }
-        }
-
-        /// <summary>
-        /// Object ID of the client's Player.
-        /// </summary>
-        public int ObjectId
-        {
-            get { return PlayerData.OwnerObjectId; }
-        }
-
-        /// <summary>
-        /// PlayerData object of the client's Player.
-        /// </summary>
-        public PlayerData PlayerData
-        {
-            get; set;
-        }
-
-        /// <summary>
-        /// Account-based state of the client.
-        /// </summary>
-        public State State
-        {
-            get; set;
-        }
-
-        /// <summary>
-        /// If the client is connected to the client & server.
-        /// </summary>
-        public bool Connected
-        {
-            get { return !_closed; }
-        }
+        public int LastUpdate = 0;
+        public int PreviousTime = 0;
 
         public Client(Proxy proxy, TcpClient client)
         {
@@ -81,21 +41,43 @@ namespace Lib_K_Relay.Networking
         }
 
         /// <summary>
-        /// Connects the client to the server in the resulting state lookup from the HelloPacket portal keye.
+        ///     Time since the client's connection began.
         /// </summary>
-        /// <param name="state">Packet containing the portal key to be used for the lookuo</param>
+        public int Time => PreviousTime + (Environment.TickCount - LastUpdate);
+
+        /// <summary>
+        ///     Object ID of the client's Player.
+        /// </summary>
+        public int ObjectId => PlayerData.OwnerObjectId;
+
+        /// <summary>
+        ///     PlayerData object of the client's Player.
+        /// </summary>
+        public PlayerData PlayerData { get; set; }
+
+        /// <summary>
+        ///     Account-based state of the client.
+        /// </summary>
+        public State State { get; set; }
+
+        /// <summary>
+        ///     If the client is connected to the client & server.
+        /// </summary>
+        public bool Connected => !_closed;
+
+        /// <summary>
+        ///     Connects the client to the server in the resulting state lookup from the HelloPacket portal key.
+        /// </summary>
+        /// <param name="state">Packet containing the portal key to be used for the lookup</param>
         public void Connect(HelloPacket state)
         {
-            _serverConnection = new TcpClient
-            {
-                NoDelay = true
-            };
+            _serverConnection = new TcpClient {NoDelay = true};
             _serverConnection.BeginConnect(State.ConTargetAddress, State.ConTargetPort, ServerConnected, state);
         }
 
         private void ServerConnected(IAsyncResult ar)
         {
-            bool success = PluginUtils.ProtectedInvoke(() =>
+            var success = PluginUtils.ProtectedInvoke(() =>
             {
                 _serverConnection.EndConnect(ar);
                 _serverStream = _serverConnection.GetStream();
@@ -114,7 +96,7 @@ namespace Lib_K_Relay.Networking
         }
 
         /// <summary>
-        /// Properly closes and disposes and resources and connections associated with this object.
+        ///     Properly closes and disposes and resources and connections associated with this object.
         /// </summary>
         public void Dispose()
         {
@@ -133,7 +115,7 @@ namespace Lib_K_Relay.Networking
         }
 
         /// <summary>
-        /// Sends a packet to the client.
+        ///     Sends a packet to the client.
         /// </summary>
         /// <param name="packet">Packet to be sent</param>
         public void SendToClient(Packet packet)
@@ -142,7 +124,7 @@ namespace Lib_K_Relay.Networking
         }
 
         /// <summary>
-        /// Sends a packet to the client's server.
+        ///     Sends a packet to the client's server.
         /// </summary>
         /// <param name="packet">Packet to be sent</param>
         public void SendToServer(Packet packet)
@@ -154,17 +136,19 @@ namespace Lib_K_Relay.Networking
         {
             lock (client ? _clientLock : _serverLock)
             {
-                bool success = PluginUtils.ProtectedInvoke(() =>
+                var success = PluginUtils.ProtectedInvoke(() =>
                 {
-                    MemoryStream ms = new MemoryStream();
-                    using (PacketWriter w = new PacketWriter(ms))
+                    var ms = new MemoryStream();
+                    using (var w = new PacketWriter(ms))
                     {
-                        w.Write((int)0);
+                        w.Write(0);
                         w.Write(packet.Id);
                         packet.Write(w);
+                        foreach (var b in packet.UnreadData)
+                            w.Write(b);
                     }
 
-                    byte[] data = ms.ToArray();
+                    var data = ms.ToArray();
                     PacketWriter.BlockCopyInt32(data, data.Length);
 
                     if (client)
@@ -185,63 +169,55 @@ namespace Lib_K_Relay.Networking
 
         private void BeginRead(int offset, int amount, bool client)
         {
-            PacketBuffer buffer = client ? _clientBuffer : _serverBuffer;
-            NetworkStream stream = client ? _clientStream : _serverStream;
+            var buffer = client ? _clientBuffer : _serverBuffer;
+            var stream = client ? _clientStream : _serverStream;
             stream.BeginRead(buffer.Bytes, offset, amount, RemoteRead,
                 new Tuple<NetworkStream, PacketBuffer>(stream, buffer));
         }
 
         private void RemoteRead(IAsyncResult ar)
         {
-            NetworkStream stream = (ar.AsyncState as Tuple<NetworkStream, PacketBuffer>).Item1;
-            PacketBuffer buffer = (ar.AsyncState as Tuple<NetworkStream, PacketBuffer>).Item2;
-            // check if the packet is a client or server packet
-            bool isClient = stream == _clientStream;
-            // allocate our RC4 cipher depending on if the packet is incoming/outgoing
-            RC4Cipher cipher = isClient ? _clientReceiveState : _serverReceiveState;
+            var stream = (ar.AsyncState as Tuple<NetworkStream, PacketBuffer>).Item1;
+            var buffer = (ar.AsyncState as Tuple<NetworkStream, PacketBuffer>).Item2;
+            var isClient = stream == _clientStream;
+            var cipher = isClient ? _clientReceiveState : _serverReceiveState;
 
-            bool success = PluginUtils.ProtectedInvoke(() =>
+            var success = PluginUtils.ProtectedInvoke(() =>
             {
                 if (!stream.CanRead) return;
 
-                int read = stream.EndRead(ar);
-                // Move the read buffer forward by how many bytes read
+                var read = stream.EndRead(ar);
                 buffer.Advance(read);
 
                 if (read == 0)
                 {
-                    // Received 0 length packet, dispose and return
                     Dispose();
-                    return;
                 }
                 else if (buffer.Index == 4)
-                {   // We have the first four bytes, resize the client buffer
+                {
+                    // We have the first four bytes, resize the client buffer
                     buffer.Resize(IPAddress.NetworkToHostOrder(
                         BitConverter.ToInt32(buffer.Bytes, 0)));
-                    // Read the packet bytes from the index to the end of the buffer
                     BeginRead(buffer.Index, buffer.BytesRemaining(), isClient);
                 }
                 else if (buffer.BytesRemaining() > 0)
-                {   // Awaiting the rest of the packet
+                {
+                    // Awaiting the rest of the packet
                     BeginRead(buffer.Index, buffer.BytesRemaining(), isClient);
                 }
                 else
-                {   // We have the full packet
+                {
+                    // We have the full packet
                     cipher.Cipher(buffer.Bytes);
-                    Packet packet = Packet.Create(buffer.Bytes);
+                    var packet = Packet.Create(buffer.Bytes);
 
                     if (isClient)
-                        // Fire client packet hooks on the Proxy class
                         _proxy.FireClientPacket(this, packet);
                     else
-                        // Fire server packet hooks on the Proxy class
                         _proxy.FireServerPacket(this, packet);
 
-                    if (packet.Send)
-                        // If we haven't blocked sending, send the packet to the server
-                        Send(packet, !isClient);
+                    if (packet.Send) Send(packet, !isClient);
 
-                    // Reset the buffer ready to read another packet header
                     buffer.Reset();
                     BeginRead(0, 4, isClient);
                 }

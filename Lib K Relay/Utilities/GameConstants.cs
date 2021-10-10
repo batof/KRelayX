@@ -1,47 +1,10 @@
 ﻿using Lib_K_Relay.Networking.Packets;
-using System;
 
 namespace Lib_K_Relay.Utilities
 {
-    [Flags]
-    public enum ConditionEffects
-    {
-        Dead = 1 << 0,
-        Quiet = 1 << 1,
-        Weak = 1 << 2,
-        Slowed = 1 << 3,
-        Sick = 1 << 4,
-        Dazed = 1 << 5,
-        Stunned = 1 << 6,
-        Blind = 1 << 7,
-        Hallucinating = 1 << 8,
-        Drunk = 1 << 9,
-        Confused = 1 << 10,
-        StunImmume = 1 << 11,
-        Invisible = 1 << 12,
-        Paralyzed = 1 << 13,
-        Speedy = 1 << 14,
-        Bleeding = 1 << 15,
-        NotUsed = 1 << 16,
-        Healing = 1 << 17,
-        Damaging = 1 << 18,
-        Berserk = 1 << 19,
-        Paused = 1 << 20,
-        Stasis = 1 << 21,
-        StasisImmune = 1 << 22,
-        Invincible = 1 << 23,
-        Invulnerable = 1 << 24,
-        Armored = 1 << 25,
-        ArmorBroken = 1 << 26,
-        Hexed = 1 << 27,
-        AnotherSpeedy = 1 << 28,
-        Unstable = 1 << 29,
-        Darkness = 1 << 30,
-        Curse = 1 << 31
-    }
-
     public enum ConditionEffectIndex
     {
+        // First batch
         Dead = 0,
         Quiet = 1,
         Weak = 2,
@@ -58,11 +21,11 @@ namespace Lib_K_Relay.Utilities
         Paralyzed = 13,
         Speedy = 14,
         Bleeding = 15,
-        NotUsed = 16,
+        ArmorBreakImmune = 16,
         Healing = 17,
         Damaging = 18,
         Berserk = 19,
-        Paused = 20,
+        InCombat = 20,
         Stasis = 21,
         StasisImmune = 22,
         Invincible = 23,
@@ -70,10 +33,41 @@ namespace Lib_K_Relay.Utilities
         Armored = 25,
         ArmorBroken = 26,
         Hexed = 27,
-        AnotherSpeedy = 28,
+        NinjaSpeedy = 28,
         Unstable = 29,
         Darkness = 30,
-        Curse = 31
+        // First batch
+
+        // Second batch
+        SlowedImmune = 31,
+        DazedImmune = 32,
+        ParalyzedImmune = 33,
+        Petrified = 34,
+        PetrifiedImmune = 35,
+        PetStasis = 36,
+        Curse = 37,
+        CurseImmune = 38,
+        HealthBoost = 39,
+        ManaBoost = 40,
+        AttackBoost = 41,
+        DefenseBoost = 42,
+        SpeedBoost = 43,
+        VitalityBoost = 44,
+        WisdomBoost = 45,
+        DexterityBoost = 46,
+        Silenced = 47,
+        Exposed = 48,
+        Energized = 49,
+        HealthDebuff = 50,
+        ManaDebuff = 51,
+        AttackDebuff = 52,
+        DefenseDebuff = 53,
+        SpeedDebuff = 54,
+        VitalityDebuff = 55,
+        WisdomDebuff = 56,
+        DexterityDebuff = 57,
+        Inspired = 58
+        // Second batch
     }
 
     public enum EffectType
@@ -97,7 +91,20 @@ namespace Lib_K_Relay.Utilities
         BeachBall = 16,
         ElectricBolts = 17, //If a pet paralyzes a monster
         ElectricFlashing = 18, //If a monster got paralyzed from a electric pet
-        RisingFury = 19 //If a pet is standing still (this white particles)
+        RisingFury = 19, //If a pet is standing still (this white particles)
+        NovaNoAoe = 20,
+        Inspired = 21,
+        HolyBeam = 22,
+        CircleTelegraph = 23,
+        ChaosBeam = 24,
+        TeleportMonster = 25,
+        Meteor = 26,
+        GildedBuff = 27,
+        JadeBuff = 28,
+        ChaosBuff = 29,
+        ThunderBuff = 30,
+        StatusFlash = 31,
+        FireOrbBuff = 32
     }
 
     public struct ARGB
@@ -109,10 +116,10 @@ namespace Lib_K_Relay.Utilities
 
         public ARGB(uint argb)
         {
-            A = (byte)((argb & 0xff000000) >> 24);
-            R = (byte)((argb & 0x00ff0000) >> 16);
-            G = (byte)((argb & 0x0000ff00) >> 8);
-            B = (byte)((argb & 0x000000ff) >> 0);
+            A = (byte) ((argb & 0xff000000) >> 24);
+            R = (byte) ((argb & 0x00ff0000) >> 16);
+            G = (byte) ((argb & 0x0000ff00) >> 8);
+            B = (byte) ((argb & 0x000000ff) >> 0);
         }
 
         public ARGB(byte a, byte r, byte g, byte b)
@@ -125,7 +132,7 @@ namespace Lib_K_Relay.Utilities
 
         public static ARGB Read(PacketReader r)
         {
-            ARGB ret = new ARGB();
+            var ret = new ARGB();
             ret.A = r.ReadByte();
             ret.R = r.ReadByte();
             ret.G = r.ReadByte();
@@ -156,6 +163,7 @@ namespace Lib_K_Relay.Utilities
         White2 = 0x050E,
         White3 = 0x50F
     }
+
     public enum Ability : uint
     {
         AttackClose = 402,
@@ -166,7 +174,7 @@ namespace Lib_K_Relay.Utilities
         MagicHeal = 408,
         Savage = 409,
         Decoy = 410,
-        RisingFury = 411,
+        RisingFury = 411
     }
 
     public enum Classes : short
@@ -184,6 +192,9 @@ namespace Lib_K_Relay.Utilities
         Mystic = 0x0323,
         Trickster = 0x0324,
         Sorcerer = 0x0325,
-        Ninja = 0x0326
+        Ninja = 0x0326,
+        Samurai = 0x0311,
+        Bard = 0x031c,
+        Summoner = 0x0331
     }
 }

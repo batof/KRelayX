@@ -1,7 +1,8 @@
-﻿using Lib_K_Relay.Networking.Packets.Client;
+﻿using System;
+using System.Linq;
+using Lib_K_Relay.Networking.Packets.Client;
 using Lib_K_Relay.Networking.Packets.DataObjects;
 using Lib_K_Relay.Networking.Packets.Server;
-using System;
 
 namespace Lib_K_Relay.Networking
 {
@@ -29,10 +30,10 @@ namespace Lib_K_Relay.Networking
 
         private void OnPlayerShoot(Client client, PlayerShootPacket packet)
         {
-            client.PlayerData.Pos = new Location()
+            client.PlayerData.Pos = new Location
             {
-                X = packet.Position.X - 0.3f * (float)Math.Cos(packet.Angle),
-                Y = packet.Position.Y - 0.3f * (float)Math.Sin(packet.Angle)
+                X = packet.Position.X - 0.3f * (float) Math.Cos(packet.Angle),
+                Y = packet.Position.Y - 0.3f * (float) Math.Sin(packet.Angle)
             };
         }
 
@@ -54,21 +55,24 @@ namespace Lib_K_Relay.Networking
         private void OnUpdate(Client client, UpdatePacket packet)
         {
             client.PlayerData.Parse(packet);
-            if (client.State.ACCID != null) return;
+            if (client.State.AccountId != null) return;
 
             State resolvedState = null;
 
-            foreach (State cstate in _proxy.States.Values)
-                if (cstate.ACCID == client.PlayerData.AccountId)
-                    resolvedState = cstate;
+            foreach (var state in _proxy.States.Values)
+                if (state.AccountId == client.PlayerData.AccountId)
+                    resolvedState = state;
 
             if (resolvedState == null)
-                client.State.ACCID = client.PlayerData.AccountId;
+            {
+                client.State.AccountId = client.PlayerData.AccountId;
+            }
             else
             {
-                foreach (var pair in client.State.States)
+                foreach (var pair in client.State.States.ToList())
                     resolvedState[pair.Key] = pair.Value;
-                foreach (var pair in client.State.States)
+
+                foreach (var pair in client.State.States.ToList())
                     resolvedState[pair.Key] = pair.Value;
 
                 client.State = resolvedState;
