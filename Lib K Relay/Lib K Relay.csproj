@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -58,7 +59,12 @@
     <Compile Include="Interface\IPlugin.cs" />
     <Compile Include="Networking\Client.cs" />
     <Compile Include="Networking\PacketBuffer.cs" />
+    <Compile Include="Networking\Packets\Client\ShootAckCounter.cs" />
+    <Compile Include="Networking\Packets\Client\ForgeRequestPacket.cs" />
+    <Compile Include="Networking\Packets\UndefinedPacket.cs" />
     <Compile Include="Networking\Packets\Client\AcceptTradePacket.cs" />
+    <Compile Include="Networking\Packets\Client\ChangePetSkinPacket.cs" />
+    <Compile Include="Networking\Packets\Client\ChangeAllyShootPacket.cs" />
     <Compile Include="Networking\Packets\Client\AoEAckPacket.cs" />
     <Compile Include="Networking\Packets\Client\BuyPacket.cs" />
     <Compile Include="Networking\Packets\Client\CancelTradePacket.cs" />
@@ -67,12 +73,14 @@
     <Compile Include="Networking\Packets\Client\CheckCreditsPacket.cs" />
     <Compile Include="Networking\Packets\Client\ChooseNamePacket.cs" />
     <Compile Include="Networking\Packets\Client\CreateGuildPacket.cs" />
+    <Compile Include="Networking\Packets\Client\CreepMoveMessagePacket.cs" />
     <Compile Include="Networking\Packets\Client\CreatePacket.cs" />
     <Compile Include="Networking\Packets\Client\EditAccountListPacket.cs" />
     <Compile Include="Networking\Packets\Client\EnemyHitPacket.cs" />
     <Compile Include="Networking\Packets\Client\EnterArenaPacket.cs" />
     <Compile Include="Networking\Packets\Client\EscapePacket.cs" />
     <Compile Include="Networking\Packets\Client\GotoAckPacket.cs" />
+    <Compile Include="Networking\Packets\Client\ResetDailyQuestsPacket.cs" />
     <Compile Include="Networking\Packets\Client\GroundDamagePacket.cs" />
     <Compile Include="Networking\Packets\Client\GuildInvitePacket.cs" />
     <Compile Include="Networking\Packets\Client\GuildRemovePacket.cs" />
@@ -83,32 +91,41 @@
     <Compile Include="Networking\Packets\Client\LeaveArenaPacket.cs" />
     <Compile Include="Networking\Packets\Client\LoadPacket.cs" />
     <Compile Include="Networking\Packets\Client\MovePacket.cs" />
-    <Compile Include="Networking\Packets\Client\PetCommandPacket.cs" />
+    <Compile Include="Networking\Packets\Client\ActivePetUpdateRequestPacket.cs" />
     <Compile Include="Networking\Packets\Client\PetYardCommandPacket.cs" />
     <Compile Include="Networking\Packets\Client\PlayerShootPacket.cs" />
     <Compile Include="Networking\Packets\Client\PlayerTextPacket.cs" />
     <Compile Include="Networking\Packets\Client\PongPacket.cs" />
+    <Compile Include="Networking\Packets\Client\RedeemExaltationRewardPacket.cs" />
     <Compile Include="Networking\Packets\Client\RequestTradePacket.cs" />
-    <Compile Include="Networking\Packets\Client\ReskinPetPacket.cs" />
+    <Compile Include="Networking\Packets\Client\QueueCancelPacket.cs" />
     <Compile Include="Networking\Packets\Client\ReskinPacket.cs" />
     <Compile Include="Networking\Packets\Client\SetConditionPacket.cs" />
     <Compile Include="Networking\Packets\Client\ShootAckPacket.cs" />
     <Compile Include="Networking\Packets\Client\TeleportPacket.cs" />
-    <Compile Include="Networking\Packets\Client\TinkerQuestPacket.cs" />
     <Compile Include="Networking\Packets\Client\UpdateAckPacket.cs" />
     <Compile Include="Networking\Packets\Client\UseItemPacket.cs" />
     <Compile Include="Networking\Packets\Client\KeyInfoRequestPacket.cs" />
     <Compile Include="Networking\Packets\Client\UsePortalPacket.cs" />
-    <Compile Include="Networking\Packets\Client\ViewQuestsPacket.cs" />
+    <Compile Include="Networking\Packets\Client\QuestRedeemPacket.cs" />
+    <Compile Include="Networking\Packets\Client\GoToQuestRoomPacket.cs" />
+    <Compile Include="Networking\Packets\DataObjects\CompressedInt.cs" />
     <Compile Include="Networking\Packets\DataObjects\PlayerData.cs" />
+    <Compile Include="Networking\Packets\Client\ChatHelloPacket.cs" />
+    <Compile Include="Networking\Packets\Server\ChatTokenPacket.cs" />
+    <Compile Include="Networking\Packets\Server\VaultContentPacket.cs" />
+    <Compile Include="Networking\Packets\Server\UnlockInformationPacket.cs" />
     <Compile Include="Networking\Packets\Server\AccountListPacket.cs" />
     <Compile Include="Networking\Packets\Server\AllyShootPacket.cs" />
     <Compile Include="Networking\Packets\Server\AoEPacket.cs" />
     <Compile Include="Networking\Packets\Server\ArenaDeathPacket.cs" />
-    <Compile Include="Networking\Packets\Server\ArenaNextWavePacket.cs" />
+    <Compile Include="Networking\Packets\Server\ExaltationBonusChangedPacket.cs" />
+    <Compile Include="Networking\Packets\Server\ForgeUnlockedBlueprintsPacket.cs" />
+    <Compile Include="Networking\Packets\Server\ForgeResultPacket.cs" />
+    <Compile Include="Networking\Packets\Server\ImminentArenaWave.cs" />
     <Compile Include="Networking\Packets\Server\BuyResultPacket.cs" />
     <Compile Include="Networking\Packets\Server\ClientStatPacket.cs" />
-    <Compile Include="Networking\Packets\Server\CreateGuildResultPacket.cs" />
+    <Compile Include="Networking\Packets\Server\GuildResultPacket.cs" />
     <Compile Include="Networking\Packets\Server\DamagePacket.cs" />
     <Compile Include="Networking\Packets\Server\DeathPacket.cs" />
     <Compile Include="Networking\Packets\Server\FailurePacket.cs" />
@@ -121,19 +138,21 @@
     <Compile Include="Networking\Packets\Server\MapInfoPacket.cs" />
     <Compile Include="Networking\Packets\Server\NameResultPacket.cs" />
     <Compile Include="Networking\Packets\Server\NewAbilityUnlockedPacket.cs" />
+    <Compile Include="Networking\Packets\Server\NewCharacterInformationPacket.cs" />
     <Compile Include="Networking\Packets\Server\NewTickPacket.cs" />
     <Compile Include="Networking\Packets\Client\OtherHitPacket.cs" />
     <Compile Include="Networking\Packets\Server\PasswordPromptPacket.cs" />
-    <Compile Include="Networking\Packets\Server\PetEvolveResultPacket.cs" />
+    <Compile Include="Networking\Packets\Server\EvolvedPetMessagePacket.cs" />
     <Compile Include="Networking\Packets\Server\PicPacket.cs" />
     <Compile Include="Networking\Packets\Server\PingPacket.cs" />
     <Compile Include="Networking\Packets\Client\PlayerHitPacket.cs" />
     <Compile Include="Networking\Packets\Server\PlaySoundPacket.cs" />
-    <Compile Include="Networking\Packets\Server\QuestFetchResponsePacket.cs" />
     <Compile Include="Networking\Packets\Server\QuestObjIdPacket.cs" />
     <Compile Include="Networking\Packets\Client\SquareHitPacket.cs" />
+    <Compile Include="Networking\Packets\Server\RealmHeroesResponsePacket.cs" />
+    <Compile Include="Networking\Packets\Server\QueueInformationPacket.cs" />
     <Compile Include="Networking\Packets\Server\QuestRedeemResponsePacket.cs" />
-    <Compile Include="Networking\Packets\Server\RemovePetFromListPacket.cs" />
+    <Compile Include="Networking\Packets\Server\DeletePetPacket.cs" />
     <Compile Include="Networking\Packets\Server\KeyInfoResponsePacket.cs" />
     <Compile Include="Networking\Packets\Server\ReskinUnlock.cs" />
     <Compile Include="Networking\Packets\Server\ServerPlayerShootPacket.cs" />
@@ -160,8 +179,6 @@
     <Compile Include="Networking\Packets\Packet.cs" />
     <Compile Include="Networking\Packets\PacketReader.cs" />
     <Compile Include="Networking\Packets\Server\TradeStartPacket.cs" />
-    <Compile Include="Networking\Packets\Server\UpdatePetPacket.cs" />
-    <Compile Include="Networking\Packets\Server\UpdatePetYardResultPacket.cs" />
     <Compile Include="Networking\Packets\Server\VerifyEmailDialogPacket.cs" />
     <Compile Include="Networking\ReconnectHandler.cs" />
     <Compile Include="Networking\State.cs" />
@@ -192,6 +209,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Utilities\FrmGenericSettings.resx">
@@ -199,13 +217,24 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Packets.xml" />
+    <None Include="Resources\Packets.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Tiles.xml" />
+    <None Include="Resources\Tiles.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Objects.xml" />
+    <None Include="Resources\Objects.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Servers.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -7,13 +7,13 @@ namespace Lib_K_Relay.GameData.DataStructures
     {
         internal static Dictionary<ushort, TileStructure> Load(XDocument doc)
         {
-            Dictionary<ushort, TileStructure> map = new Dictionary<ushort, TileStructure>();
+            var map = new Dictionary<ushort, TileStructure>();
 
             doc.Element("GroundTypes")
                 .Elements("Ground")
                 .ForEach(tile =>
                 {
-                    TileStructure t = new TileStructure(tile);
+                    var t = new TileStructure(tile);
                     map[t.ID] = t;
                 });
 
@@ -21,48 +21,48 @@ namespace Lib_K_Relay.GameData.DataStructures
         }
 
         /// <summary>
-        /// The numerical identifier of this tile
+        ///     The numerical identifier of this tile
         /// </summary>
-        public ushort ID { get; private set; }
+        public ushort ID { get; }
 
         /// <summary>
-        /// Whether this tile can be walked on
+        ///     Whether this tile can be walked on
         /// </summary>
         public bool NoWalk;
 
         /// <summary>
-        /// How fast you walk across this tile
+        ///     How fast you walk across this tile
         /// </summary>
         public float Speed;
 
         /// <summary>
-        /// Whether you sink into this tile visually (e.g. water)
+        ///     Whether you sink into this tile visually (e.g. water)
         /// </summary>
         public bool Sink;
 
         /// <summary>
-        /// The minimum damage this tile can deal (e.g. lava)
+        ///     The minimum damage this tile can deal (e.g. lava)
         /// </summary>
         public ushort MinDamage;
 
         /// <summary>
-        /// The maximum damage this tile can deal (e.g. lava)
+        ///     The maximum damage this tile can deal (e.g. lava)
         /// </summary>
         public ushort MaxDamage;
 
         /// <summary>
-        /// The text identifier for this tile
+        ///     The text identifier for this tile
         /// </summary>
-        public string Name { get; private set; }
+        public string Name { get; }
 
         public TileStructure(XElement tile)
         {
-            ID = (ushort)tile.AttrDefault("type", "0x0").ParseHex();
+            ID = (ushort) tile.AttrDefault("type", "0x0").ParseHex();
             NoWalk = tile.HasElement("NoWalk");
             Speed = tile.ElemDefault("Speed", "1").ParseFloat();
             Sink = tile.HasElement("Sink");
-            MinDamage = (ushort)tile.ElemDefault("MinDamage", "0").ParseInt();
-            MaxDamage = (ushort)tile.ElemDefault("MaxDamage", "0").ParseInt();
+            MinDamage = (ushort) tile.ElemDefault("MinDamage", "0").ParseInt();
+            MaxDamage = (ushort) tile.ElemDefault("MaxDamage", "0").ParseInt();
 
             Name = tile.AttrDefault("id", "");
         }

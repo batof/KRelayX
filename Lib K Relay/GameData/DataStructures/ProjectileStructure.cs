@@ -5,65 +5,65 @@ namespace Lib_K_Relay.GameData.DataStructures
 {
     public class ProjectileStructure : IDataStructure<byte>
     {
-        /// <summary>
-        /// The numerical identifier for this projectile
-        /// </summary>
-        public byte ID { get; private set; }
+        public int Acceleration;
+
+        public float AccelerationDelay;
+        public float Amplitude;
+        public bool ArmorPiercing;
+        public bool Boomerang;
 
         /// <summary>
-        /// How much damage the projectile deals
+        ///     How much damage the projectile deals
         /// </summary>
         public int Damage;
 
-        /// <summary>
-        /// How fast the projectile moves
-        /// </summary>
-        public float Speed;
+        public float Frequency;
 
         /// <summary>
-        /// The size of the projectile
+        ///     The lifetime of the projectile, in milliseconds
+        /// </summary>
+        public float Lifetime;
+
+        public float Magnitude;
+
+        public int MaxDamage;
+        public int MinDamage;
+        public bool MultiHit;
+        public bool Parametric;
+        public bool PassesCover;
+
+        /// <summary>
+        ///     The size of the projectile
         /// </summary>
         public int Size;
 
         /// <summary>
-        /// The lifetime of the projectile, in milliseconds
+        ///     How fast the projectile moves
         /// </summary>
-        public int Lifetime;
+        public float Speed;
 
-        public int MaxDamage;
-        public int MinDamage;
-
-        public float Magnitude;
-        public float Amplitude;
-        public float Frequency;
-
-        public bool Wavy;
-        public bool Parametric;
-        public bool Boomerang;
-        public bool ArmorPiercing;
-        public bool MultiHit;
-        public bool PassesCover;
+        public int SpeedClamp;
 
         /// <summary>
-        /// What status effects, if any, the projectile applies (name: duration in seconds)
+        ///     What status effects, if any, the projectile applies (name: duration in seconds)
         /// </summary>
         public Dictionary<string, float> StatusEffects;
 
-        /// <summary>
-        /// The text identifier for this projectile
-        /// </summary>
-        public string Name { get; private set; }
+        public bool Wavy;
 
         public ProjectileStructure(XElement projectile)
         {
-            ID = (byte)projectile.AttrDefault("id", "0").ParseInt();
+            ID = (byte) projectile.AttrDefault("id", "0").ParseInt();
             Damage = projectile.ElemDefault("Damage", "0").ParseInt();
             Speed = projectile.ElemDefault("Speed", "0").ParseFloat() / 10000f;
             Size = projectile.ElemDefault("Size", "0").ParseInt();
-            Lifetime = projectile.ElemDefault("LifetimeMS", "0").ParseInt();
+            Lifetime = projectile.ElemDefault("LifetimeMS", "0").ParseFloat();
 
             MaxDamage = projectile.ElemDefault("MaxDamage", "0").ParseInt();
             MinDamage = projectile.ElemDefault("MinDamage", "0").ParseInt();
+            Acceleration = projectile.ElemDefault("Acceleration", "0").ParseInt();
+            AccelerationDelay = projectile.ElemDefault("AccelerationDelay", "0").ParseFloat();
+            SpeedClamp = projectile.ElemDefault("SpeedClamp", "-1").ParseInt();
 
             Magnitude = projectile.ElemDefault("Magnitude", "0").ParseFloat();
             Amplitude = projectile.ElemDefault("Amplitude", "0").ParseFloat();
@@ -84,9 +84,19 @@ namespace Lib_K_Relay.GameData.DataStructures
             Name = projectile.ElemDefault("ObjectId", "");
         }
 
+        /// <summary>
+        ///     The numerical identifier for this projectile
+        /// </summary>
+        public byte ID { get; }
+
+        /// <summary>
+        ///     The text identifier for this projectile
+        /// </summary>
+        public string Name { get; }
+
         public override string ToString()
         {
-            return string.Format("Projectile: {0} (0x{1:X})", Name, ID);
+            return $"Projectile: {Name} (0x{ID:X})";
         }
     }
 }

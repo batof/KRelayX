@@ -1,9 +1,9 @@
-﻿using Lib_K_Relay.Networking.Packets;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
+using Lib_K_Relay.Networking.Packets;
 
 namespace Lib_K_Relay.GameData.DataStructures
 {
@@ -11,13 +11,13 @@ namespace Lib_K_Relay.GameData.DataStructures
     {
         internal static Dictionary<byte, PacketStructure> Load(XDocument doc)
         {
-            Dictionary<byte, PacketStructure> map = new Dictionary<byte, PacketStructure>();
+            var map = new Dictionary<byte, PacketStructure>();
 
             doc.Element("Packets")
                 .Elements("Packet")
                 .ForEach(packet =>
                 {
-                    PacketStructure p = new PacketStructure(packet);
+                    var p = new PacketStructure(packet);
                     map[p.ID] = p;
                 });
 
@@ -31,42 +31,38 @@ namespace Lib_K_Relay.GameData.DataStructures
             return map;
         }
 
-        private static Type tPacket = typeof(Packet);
-        private static Type[] packetTypes = Assembly.GetAssembly(typeof(Proxy)).GetTypes().Where(t => tPacket.IsAssignableFrom(t)).ToArray();
+        private static readonly Type tPacket = typeof(Packet);
+
+        private static readonly Type[] packetTypes = Assembly.GetAssembly(typeof(Proxy)).GetTypes()
+            .Where(t => tPacket.IsAssignableFrom(t)).ToArray();
 
         /// <summary>
-        /// The numerical identifier for this packet
+        ///     The numerical identifier for this packet
         /// </summary>
         public byte ID { get; private set; }
 
-        public string Name { get { return PacketType.ToString(); } }
+        public string Name => PacketType.ToString();
 
         /// <summary>
-        /// The type of this packet
+        ///     The type of this packet
         /// </summary>
         public PacketType PacketType;
 
         /// <summary>
-        /// The class this packet can be used as
+        ///     The class this packet can be used as
         /// </summary>
         public Type Type;
 
         public PacketStructure(XElement packet)
         {
-            ID = (byte)packet.ElemDefault("PacketID", "").ParseInt();
-            if (!Enum.TryParse(packet.ElemDefault("PacketName", ""), out PacketType))
-            {
-                PacketType = PacketType.UNKNOWN;
-            }
+            ID = (byte) packet.AttrDefault("type", "").ParseInt();
+            if (!Enum.TryParse(packet.AttrDefault("id", ""), out PacketType)) PacketType = PacketType.UNKNOWN;
 
             Type = null;
-            foreach (Type pType in packetTypes)
+            foreach (var pType in packetTypes)
             {
-                PacketType t = (Activator.CreateInstance(pType) as Networking.Packets.Packet).Type;
-                if (t == PacketType)
-                {
-                    Type = pType;
-                }
+                var t = (Activator.CreateInstance(pType) as Packet).Type;
+                if (t == PacketType) Type = pType;
             }
         }
 
